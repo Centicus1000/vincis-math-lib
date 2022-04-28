@@ -9,6 +9,9 @@ SET(VML_SOURCE_FILES
    src/complex.cpp
    src/polynomial.cpp
    src/fft.cpp
+   src/parse.cpp
+   src/interval.cpp
+   src/base.cpp
    src/cardgame.cpp
 )
 
@@ -25,6 +28,9 @@ SET(VML_HEADER_FILES
    complex.h
    polynomial.h
    fft.h
+   parse.h
+   interval.h
+   base.h
    cardgame.h
 )
 

@@ -4,7 +4,8 @@
 #include "basics.h"
 
 #include <vector>
-#include <map>
+#include <functional>
+
 
 namespace vml {
 
@@ -26,7 +27,8 @@ namespace vml {
  * @tparam E Kantendatenklasse
  */
 template<class N, class E = char>
-class Graph {
+class Graph
+{
 public:
 
     /**
@@ -36,6 +38,15 @@ public:
      * Sie entspricht dem [`std::size_t`-Typen](https://en.cppreference.com/w/cpp/types/size_t), welcher einem Integraltypen ohne Vorzeichen entspricht.
      */
     typedef std::size_t Key;
+    
+    /**
+     * @brief Nonode (Kein Knoten).
+     *
+     * Der maximalste Index wird verwendet um keinen Knoten auszudrücken. Immer wenn ein Index zu einem nicht vorhandenen Element abgefragt wird, wird er nonode index zurückgeben, um so Fehler meldungen zu umgehen.
+     * durch den static_cast von -1 auf den Key typen, welcher intern ein unsigned long ist wird automatisch die höchstmögliche Zahl genommen.
+     */
+    static constexpr Key nonode{ static_cast<Key>(-1) };
+    
     
     /**
      * @brief Kantentyp.
@@ -52,21 +63,21 @@ public:
          * Index des Ausgangsknotens einer gerichtetenen Kante. Zur Veranschaulichung wird die Stammbaumanalogie angewendet, wodurch dieser Knoten als "Elter" bezeichnet wird.
          */
         Key parent;
-        
+
         /**
          * @brief Kindknoten bzw. Zielknoten.
          *
          * Index des Zielknotens einer gerichtetenen Kante. Zur Veranschaulichung wird die Stammbaumanalogie angewendet, wodurch dieser Knoten als "Kind" bezeichnet wird.
          */
         Key child;
-        
+
         /**
          * @brief Optionale Kanteninformation
          *
          * Pro Kante kann eine zusätzliche, optionale Information angegeben werden, wie eine Gewichtung. Diese wird durch `E` repräsentiert.
          */
         E data;
-        
+
         /**
          * @brief Kanten Konstruktor.
          *
@@ -78,17 +89,19 @@ public:
          */
         Edge(int _parent, int _child, const E& _data) :
         parent(_parent), child(_child), data(_data)
-        {}
+		{}
+
     };
-    
+
     /**
      * @brief Knotenliste.
      *
-     * Ein `std::vector`-Kontainer für Knotentypen `N`.
+     * Ein `std::vector`-Kontainer für Knotentypen `N`. Als öffentliches Objekt kann die Knotenliste zum einfügen neuer Knoten oder zum entfernen alter Knoten verwendet werden.
+     * Achtung: Da die Kanten Indizes, verwendet um auf ihre Knoten zu verweisen, sollte die Reihenfolge der Knoten nicht verändert werden.
      */
     std::vector<N> nodes;
-    
-    
+
+
     /**
      * @brief Destruktor.
      *
@@ -98,8 +111,8 @@ public:
     {
         for (std::vector<Edge>* e: adjacencies) delete e;
     }
-    
-    
+
+
     /**
      * @brief Verknüpft zwei Knoten mit einer Kante.
      *
@@ -113,7 +126,7 @@ public:
     {
         edges(parent).emplace_back(parent, child, data);
     }
-    
+
     /**
      * @brief Bidirektionale Verknüpfung.
      *
@@ -129,8 +142,8 @@ public:
         link(parent, child, data);
         link(child, parent, data);
     }
-    
-    
+
+
     /**
      * @name edges
      * @brief Auswärtigen Kanten eines Knotens.
@@ -166,20 +179,32 @@ public:
      */
     const std::vector<Edge>& edges(Key node) const
     {
-        // kreire eine statische Instanz einer leeren Kantenliste
+        // kreiere eine statische Instanz einer leeren Kantenliste
         static const std::vector<Edge> empty{};
-        
-        // prüfe ob der Key zu groß für adjacencies ist
+
+        // prüfe ob der Key zu groß für adjacencies ist, trifft auch für nonode zu
         if (node >= adjacencies.size()) return empty;
         // prüfe ob der Knoten noch keine auswärtigen Kanten besitzt
         if (!adjacencies[node]) return empty;
-        
+
         // andern falls gebe die richtige Kantenliste als konstante Referenz zurück
         return *adjacencies[node];
     }
     ///@}
     
-    
+    /**
+     * @brief Kanten löschen.
+     *
+     * Löschen die Pointer zu den Kanten listen die in der privaten Adjazenz liste gespeichert sind
+     */
+    void delet_all_edges()
+    {
+        // delete all Edge vector in adjacency list
+        for(auto evec : adjacencies) delete evec;
+        adjacencies.clear();
+    }
+
+
     /// children
     /// returns a vector of indices pointing towards the child nodes of given parent node
     /// @param parent idex of parent node
@@ -197,10 +222,10 @@ public:
             keys.push_back(e.child);
         return keys;
     }
-    
+
     // ----------------------------------------------
     // Iterieren
-    
+
     /**
      * @brief Iteriere durch alle Kanten.
      *
@@ -210,7 +235,7 @@ public:
      * @param predicate Eine Lambda-Funktion, die eine Kanten Referenz als Eingang nimmt.
      */
     ///@{
-    void for_edges(const std::function<void(Edge &)>& predicate)
+    void for_edges(const std::function<void(Edge&)>& predicate)
     {
         for (std::vector<Edge>* evec : adjacencies)
             if (evec)
@@ -225,7 +250,7 @@ public:
                     predicate( e );
     }
     ///@}
-    
+
     /**
      * @brief Iteriere durch alle Knoten.
      *
@@ -234,16 +259,16 @@ public:
      * @param predicate Eine Lambda-Funktion, die eine Kanten Referenz als Eingang nimmt.
      */
     ///@{
-    void for_nodes(const std::function<void(N &)>& predicate)
+    void for_nodes(const std::template function<void(N&)>& predicate)
     {
-        for (N* nptr : nodes) predicate( *nptr );
+        for (N& nref : nodes) predicate( nref );
     }
-    void for_nodes(const std::function<void(const N&)>& predicate) const
+    void for_nodes(const std::template function<void(const N&)>& predicate) const
     {
-        for (N* nptr : nodes) predicate( *nptr );
+        for (const N& nref : nodes) predicate( nref );
     }
     ///@}
-    
+
 private:
     /**
      * @brief Adjazenzliste.
@@ -254,7 +279,7 @@ private:
      * Diese Datenstruktur dient nur der Graph internen Implementierung un muss von außerhalb nicht aufgerufen werden.
      */
     std::vector< std::vector<Edge>* > adjacencies;
-    
+
     /**
      * @brief Knoten und Adjazenzen syncronisieren.
      *

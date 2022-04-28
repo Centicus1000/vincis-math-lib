@@ -2,9 +2,11 @@
 #define vml_vec2_hpp
 
 #include "basics.h"
+#include "parse.h" // vec2.h add some functionaliy to parse namespace
+
+#include <string> // for parsing
 
 namespace vml {
-
 
 /**
  * @brief Zweidimensionaler Vektor.
@@ -39,8 +41,7 @@ struct vec2
     void operator -= (const vec2&);
     void operator *= (float);
     void operator /= (float);
-
-    // Debugging
+    
     friend std::ostream& operator << (std::ostream&, const vec2&);
 };
 
@@ -53,9 +54,20 @@ vec2 operator * (float factor, const vec2& v);
 vec2 operator * (const vec2& v, float factor);
 vec2 operator / (const vec2& v, float divident);
 
+
 vec2 polar(float angle);
 float distance(const vec2& u, const vec2& v);
 float dot(const vec2& u, const vec2& v);
+
+
+// String conversion
+namespace parse {
+
+bool stoV2(vec2&, const String&);
+bool stoV2vec(std::vector<vec2>&, const String&);
+String to_string(const vec2&);
+
+} /* namespace parse */
 
 } /* namespace vml */
 #endif /* vml_vec2_hpp */

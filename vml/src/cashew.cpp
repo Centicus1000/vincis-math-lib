@@ -112,3 +112,38 @@ ArcShape* Cashew::construct() const
     
     return as;
 }
+
+// ----------------------------------------------
+// Parsing
+
+/**
+ * @brief Konvertiere String zu Chasew.
+ *
+ * Ließt den String als einen float Vector.
+ * Schriebt dann die Einträge des Vektors der Reihe nach zu den Parametern: d, r1, r2, g.
+ * Falls die Convertierung nicht klappt oder die Float-Vector nicht die richtige Größe (4) hat, wird false zurrückgegeben.
+ * @param c Referenz zu einer Cashew Struktur, deren Parameter überschrieben werden
+ * @param s der String, der geparst werden soll
+ */
+bool vml::parse::stoCashew(Cashew& c, const String& s)
+{
+    // extract parameters as float vector
+    std::vector<float> v;
+    if (!stofv(v, s)) return false;
+    if (v.size() != 4) return false;
+    // save parameters to cashew struct
+    c.d = v[0]; c.r1 = v[1]; c.r2 = v[2]; c.g = v[3];
+    return true;
+}
+
+/**
+ * @brief Konvertiere Chashew zu einem String.
+ *
+ * Schriebt die vier Parameter der Chasew-Struktur in einem Float-Vector.
+ * Dieser wird dann an to_string(std::vector) weitergereicht und zu einem string konvertiert.
+ */
+std::string vml::parse::to_string(const Cashew& c)
+{
+    std::vector<float> v{ c.d, c.r1, c.r2, c.g };
+    return to_string(v);
+}

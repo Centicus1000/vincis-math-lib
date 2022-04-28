@@ -2,6 +2,7 @@
 #define vml_cashew_h
 
 #include "arcshape.h"
+#include "parse.h"
 
 namespace vml {
 
@@ -30,6 +31,14 @@ struct Cashew
     // Debugging
     friend std::ostream& operator<< (std::ostream&, const Cashew&);
 };
+
+// Parsing
+namespace parse {
+
+bool stoCashew(Cashew&, const String&);
+String to_string(const Cashew&);
+
+} /* namespace parse */
 
 } /* vml */
 #endif /* vml_cashew_h */
