@@ -1,0 +1,26 @@
+cmake_minimum_required(VERSION 3.8)
+
+project(vml)
+
+set(CMAKE_CXX_VISIBILITY_PRESET hidden)
+set(CMAKE_VISIBILITY_INLINES_HIDDEN ON)
+
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/bin")
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/bin")
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/bin")
+
+include(GNUInstallDirs)
+
+
+add_subdirectory(vml)
+add_subdirectory(debug)
+
+# default startup project for Visual Studio
+if (MSVC)
+	set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT vml)
+endif()
+
+install(
+  DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/vml"
+  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+)
