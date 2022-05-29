@@ -10,13 +10,13 @@ using namespace vml;
  *
  * Initialisiert die Matrix über vier Zeilenvektoren, damit folgende Schreibweise möglich wird:
  *  `mat4{
- *      vec4(d, 0, 0, 0),
- *      vec4(0, d, 0, 0),
- *      vec4(0, 0, d, 0),
- *      vec4(0, 0, 0, d) };
+ *      Vec4(d, 0, 0, 0),
+ *      Vec4(0, d, 0, 0),
+ *      Vec4(0, 0, d, 0),
+ *      Vec4(0, 0, 0, d) };
  *  `
  */
-mat4::mat4(const vec4& ex, const vec4& ey, const vec4& ez, const vec4& ew) :
+mat4::mat4(const Vec4& ex, const Vec4& ey, const Vec4& ez, const Vec4& ew) :
 M{
     ex.x, ex.y, ex.z, ex.w,
     ey.x, ey.y, ey.z, ey.w,
@@ -33,10 +33,10 @@ M{
  * @param d der Wert auf der Hauptdiagonalen.
  */
 mat4::mat4(float d) :
-mat4(vec4(d, 0, 0, 0),
-     vec4(0, d, 0, 0),
-     vec4(0, 0, d, 0),
-     vec4(0, 0, 0, d))
+mat4(Vec4(d, 0, 0, 0),
+     Vec4(0, d, 0, 0),
+     Vec4(0, 0, d, 0),
+     Vec4(0, 0, 0, d))
 {}
 
 /**
@@ -101,9 +101,9 @@ float mat4::at(int row, int col) const
  *
  * Erstellt einen Vec4 auf den Einträgen in der Zeile und gibt diesen zurück. Die Referenz zu den Daten geht dabei verloren
  */
-vec4 mat4::row(int i) const
+Vec4 mat4::row(int i) const
 {
-    return vec4(at(i,0), at(i,0), at(i,0), at(i,0));
+    return Vec4(at(i,0), at(i,0), at(i,0), at(i,0));
 }
 
 /**
@@ -111,9 +111,9 @@ vec4 mat4::row(int i) const
  *
  * Erstellt einen Vec4 auf den Einträgen in der Spalten und gibt diesen zurück. Die Referenz zu den Daten geht dabei verloren
  */
-vec4 mat4::col(int i) const
+Vec4 mat4::col(int i) const
 {
-    return vec4(at(0,i), at(1,i), at(2,i), at(3,i));
+    return Vec4(at(0,i), at(1,i), at(2,i), at(3,i));
 }
 
 // ----------------------------------------------
@@ -129,16 +129,16 @@ vec4 mat4::col(int i) const
  * @param center Specifies the position of the reference point
  * @param up Specifies the direction of the up vector
  */
-mat4 vml::lookat(const vec3& from, const vec3& to, const vec3& up = vec3(0, 1, 0))
+mat4 vml::lookat(const Vec3& from, const Vec3& to, const Vec3& up = Vec3(0, 1, 0))
 {
-    vec3 f{ (from-to).normalized() };
-    vec3 s{ cross(f,up).normalized() };
-    vec3 u{ cross(s,f).normalized() };
+    Vec3 f{ (from-to).normalized() };
+    Vec3 s{ cross(f,up).normalized() };
+    Vec3 u{ cross(s,f).normalized() };
     
-    vec4 ex {s.x, u.x, f.x, 0};
-    vec4 ey {s.y, u.y, f.y, 0};
-    vec4 ez {s.z, u.z, f.z, 0};
-    vec4 ew {  0,   0,   0, 1};
+    Vec4 ex {s.x, u.x, f.x, 0};
+    Vec4 ey {s.y, u.y, f.y, 0};
+    Vec4 ez {s.z, u.z, f.z, 0};
+    Vec4 ew {  0,   0,   0, 1};
     return mat4(ex, ey, ez, ew);
 }
 
@@ -158,10 +158,10 @@ mat4 vml::lookat(const vec3& from, const vec3& to, const vec3& up = vec3(0, 1, 0
 mat4 vml::ortho(float left, float right, float bottom, float top, float near, float far)
 {
     return {
-        vec4{ 2.f/(right-left), 0, 0, -(right+left)/(right-left) },
-        vec4{ 0, 2.f/(top-bottom), 0, -(top+bottom)/(top-bottom) },
-        vec4{ 0, 0, -2.f/(far-near), -(far+near)/(far-near)},
-        vec4{ 0, 0, 0, 1}
+        Vec4{ 2.f/(right-left), 0, 0, -(right+left)/(right-left) },
+        Vec4{ 0, 2.f/(top-bottom), 0, -(top+bottom)/(top-bottom) },
+        Vec4{ 0, 0, -2.f/(far-near), -(far+near)/(far-near)},
+        Vec4{ 0, 0, 0, 1}
     };
 }
 

@@ -29,7 +29,7 @@ bool stoiv(std::vector<int>&, const String&);
  * @brief Vector to String.
  *
  * Eine Template-Funktion, die Vector von beliebigem Type zu einem String convertiert. Dafür muss der Type über einen validen string_stream operator<< overload verfügen.
- * Funktioniert für int, float und vec2.
+ * Funktioniert für int, float und Vec2.
  * @param v std::vector dessen einträge von template-Typen sind
  * @param convect eine std::function die einen template-Typen/einen Eintrag im Vector zu einem String konvertiert.
  */
@@ -79,7 +79,7 @@ bool stov(std::vector<T>& v,
     if (stop==String::npos) return false;
     // empty vector is possible
     if (s[start]=='[') return true;
-    // try to parse vec2 from string and push back
+    // try to parse Vec2 from string and push back
     T temp;
     if (!convert(temp, s.substr(start+1, stop))) return false;
     v.push_back(temp);

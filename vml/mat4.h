@@ -27,7 +27,7 @@ struct mat4
     float M[f_size];
     
     // Konstruktoren
-    mat4(const vec4&, const vec4&, const vec4&, const vec4&);
+    mat4(const Vec4&, const Vec4&, const Vec4&, const Vec4&);
     mat4(float);
     mat4();
     
@@ -37,8 +37,8 @@ struct mat4
     const float& operator[] (int i) const;
     float& at(int, int);
     float at(int, int) const;
-    vec4 row(int i) const;
-    vec4 col(int i) const;
+    Vec4 row(int i) const;
+    Vec4 col(int i) const;
     
     // Methoden
     void transpose();
@@ -51,7 +51,7 @@ struct mat4
 // ----------------------------------------------
 // Namespace Methoden
 
-mat4 lookat(const vec3&, const vec3&, const vec3&);
+mat4 lookat(const Vec3&, const Vec3&, const Vec3&);
 mat4 ortho(float left, float right, float bottom, float top, float nearVal, float farVal);
 
 } /* vml */

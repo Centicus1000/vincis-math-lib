@@ -24,7 +24,7 @@ struct Arc
      *
      * Die Sartposition des Kreisbogens ist ein zweidimensionaler Vektor. Der korrespondierende Kreis geht immer durch diesen Punkt.
      */
-    vec2 srt;
+    Vec2 srt;
     
     /**
      * @brief Startwinkel (start angle)
@@ -60,17 +60,17 @@ struct Arc
     bool  is_straight() const;
     float radius() const;
     float central_angle() const;
-    vec2  center() const;
+    Vec2  center() const;
     bool reaches(float) const;
     
     // Punkte auf dem Bogen
-    vec2 at_angle(float) const;
-    vec2 at_length(float) const;
-    vec2 end() const;
+    Vec2 at_angle(float) const;
+    Vec2 at_length(float) const;
+    Vec2 end() const;
 
     // Methoden
-    void transfrom(float, vec2);
-    void discretize(std::vector<vec2>& output, float res = .3) const;
+    void transfrom(float, Vec2);
+    void discretize(std::vector<Vec2>& output, float res = .3) const;
     std::string tikz() const;
     
     // Debugging

@@ -1,5 +1,5 @@
-#ifndef vml_vec3_h
-#define vml_vec3_h
+#ifndef vml_Vec3_h
+#define vml_Vec3_h
 
 #include "basics.h"
 
@@ -15,7 +15,7 @@ namespace vml {
  *  - y-Achse: Unten nach Oben
  *  - z-Achse: Vorne nach Hinten
  */
-struct vec3
+struct Vec3
 {
     /// Dimension des Vektor
     static const int size{ 3 };
@@ -28,39 +28,39 @@ struct vec3
     float z;
     
     // Konstruktoren
-    vec3(float, float, float);
-    vec3(float);
-    vec3();
+    Vec3(float, float, float);
+    Vec3(float);
+    Vec3();
     
     // Methoden
     float norm() const;
-    vec3 normalized() const;
+    Vec3 normalized() const;
     
     // Operatoren
-    vec3 operator -() const;
-    void operator += (const vec3& other);
-    void operator -= (const vec3& other);
+    Vec3 operator -() const;
+    void operator += (const Vec3& other);
+    void operator -= (const Vec3& other);
     void operator *= (float factor);
     void operator /= (float factor);
     
     // Debugging
-    friend std::ostream& operator << (std::ostream& os, const vec3& v);
+    friend std::ostream& operator << (std::ostream& os, const Vec3& v);
 };
 
 
 // ----------------------------------------------
 // Namespace Methoden
 
-vec3 operator + (const vec3& u, const vec3& v);
-vec3 operator - (const vec3& u, const vec3& v);
-vec3 operator * (float factor, const vec3& v);
-vec3 operator * (const vec3& v, float factor);
-vec3 operator / (const vec3& v, float divident);
+Vec3 operator + (const Vec3& u, const Vec3& v);
+Vec3 operator - (const Vec3& u, const Vec3& v);
+Vec3 operator * (float factor, const Vec3& v);
+Vec3 operator * (const Vec3& v, float factor);
+Vec3 operator / (const Vec3& v, float divident);
 
-float distance(const vec3& u, const vec3& v);
-float dot(const vec3& u, const vec3& v);
-vec3 orbit(float yaw, float pitch);
-vec3 cross(const vec3& a, const vec3& b);
+float distance(const Vec3& u, const Vec3& v);
+float dot(const Vec3& u, const Vec3& v);
+Vec3 orbit(float yaw, float pitch);
+Vec3 cross(const Vec3& a, const Vec3& b);
 
 } /* vml */
-#endif /* vml_vec3_h */
+#endif /* vml_Vec3_h */

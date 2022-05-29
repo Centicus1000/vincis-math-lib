@@ -1,7 +1,7 @@
 #ifndef vml_shape_h
 #define vml_shape_h
 
-#include "arc.h"
+#include "Arc.h"
 
 namespace vml {
 
@@ -18,10 +18,10 @@ public:
     using std::vector<Arc>::vector;
 
     // Methoden
-    void transfrom(float, vec2);
-    std::vector<vec2> lowest_points() const;
-    std::vector<vec2>* discretize(float res=.3) const;
-    std::vector<vec2>* discretize(int requested_size) const;
+    void transfrom(float, Vec2);
+    std::vector<Vec2> lowest_points() const;
+    std::vector<Vec2>* discretize(float res=.3) const;
+    std::vector<Vec2>* discretize(int requested_size) const;
     std::string tikz(const char* optionals = "") const;
     
     // Debugging

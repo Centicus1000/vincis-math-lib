@@ -36,7 +36,7 @@ ArcShape* Cashew::construct() const
     const int num_of_arcs{4};
     
     // varialbes for initializing arcs
-    vec2  srt {};
+    Vec2  srt {};
     float ang {};
     std::array<float, num_of_arcs> crvs {};
     std::array<float, num_of_arcs> lngs {};
@@ -50,7 +50,7 @@ ArcShape* Cashew::construct() const
         /* STRAIGHT CHASHEW */
         const float alf{ acos((r1 - r2) / d) };
         const float bet{ pi - alf };
-        const float dlt{ (vec2(d,0) + (r2-r1)*polar(alf)).norm() };
+        const float dlt{ (Vec2(d,0) + (r2-r1)*polar(alf)).norm() };
 
         // position and angle of first arc
         srt = r1 * polar(alf);

@@ -1,9 +1,9 @@
 SET(VML_SOURCE_FILES
-   src/vec2.cpp
-   src/vec3.cpp
-   src/vec4.cpp
+   src/Vec2.cpp
+   src/Vec3.cpp
+   src/Vec4.cpp
    src/mat4.cpp
-   src/arc.cpp
+   src/Arc.cpp
    src/arcshape.cpp
    src/cashew.cpp
    src/complex.cpp
@@ -17,11 +17,11 @@ SET(VML_SOURCE_FILES
 
 SET(VML_HEADER_FILES
    basics.h
-   vec2.h
-   vec3.h
-   vec4.h
+   Vec2.h
+   Vec3.h
+   Vec4.h
    mat4.h
-   arc.h
+   Arc.h
    arcshape.h
    cashew.h
    graph.h

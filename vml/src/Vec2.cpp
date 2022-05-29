@@ -10,7 +10,7 @@ using namespace vml;
  *
  * Initialisiert explizit die x- und y-Koordinate des Vektors.
  */
-vec2::vec2(float _x, float _y) : x(_x), y(_y)
+Vec2::Vec2(float _x, float _y) : x(_x), y(_y)
 {}
 
 /**
@@ -20,7 +20,7 @@ vec2::vec2(float _x, float _y) : x(_x), y(_y)
  *
  * @param both der Wert von der x- und y-Koordinate
  */
-vec2::vec2(float both) : vec2(both, both)
+Vec2::Vec2(float both) : Vec2(both, both)
 {}
 
 /**
@@ -28,7 +28,7 @@ vec2::vec2(float both) : vec2(both, both)
  *
  * Initialisiert beide Koordinaten auf 0.
  */
-vec2::vec2() : vec2(0.f, 0.f)
+Vec2::Vec2() : Vec2(0.f, 0.f)
 {}
 
 
@@ -42,27 +42,27 @@ vec2::vec2() : vec2(0.f, 0.f)
  */
 ///@{
 /** Invertierung */
-vec2 vec2::operator -() const
+Vec2 Vec2::operator -() const
 {
-    return vec2(-x, -y);
+    return Vec2(-x, -y);
 }
 /** Addition */
-void vec2::operator += (const vec2& other)
+void Vec2::operator += (const Vec2& other)
 {
     x += other.x; y += other.y;
 }
 /** Subtraction */
-void vec2::operator -= (const vec2& other)
+void Vec2::operator -= (const Vec2& other)
 {
     x -= other.x; y -= other.y;
 }
 /** Skalierung mit einem Skalar */
-void vec2::operator *= (float factor)
+void Vec2::operator *= (float factor)
 {
     x *= factor; y *= factor;
 }
 /** Invertierte Skalierung durch Division mit einem Skalar */
-void vec2::operator /= (float factor)
+void Vec2::operator /= (float factor)
 {
     x /= factor; y /= factor;
 }
@@ -74,7 +74,7 @@ void vec2::operator /= (float factor)
  *
  * Berechnet die zweite Vektornorm (aka die Länge) des Vektors.
  */
-float vec2::norm() const
+float Vec2::norm() const
 {
     return sqrt(x*x + y*y);
 }
@@ -84,10 +84,10 @@ float vec2::norm() const
  *
  * Gibt den Vektor zurück, der in die selbe Richtung zeigt, aber eine Länge von 1 hat. Das wird durch das Dividieren mit der Länge des Vektors erreicht.
  */
-vec2 vec2::unit() const
+Vec2 Vec2::unit() const
 {
     float l{ norm() };
-    return vec2(x/l, y/l);
+    return Vec2(x/l, y/l);
 }
 
 /**
@@ -98,9 +98,9 @@ vec2 vec2::unit() const
  *
  * @param angle Der Roationswinkel.
  */
-vec2 vec2::rotated(float angle) const
+Vec2 Vec2::rotated(float angle) const
 {
-    return vec2(x*cos(angle) - y*sin(angle),
+    return Vec2(x*cos(angle) - y*sin(angle),
                 x*sin(angle) + y*cos(angle));
 }
 
@@ -112,9 +112,9 @@ vec2 vec2::rotated(float angle) const
  *
  * Die Summe von zwei Vektoren. Wegen des Kommutativgesetzes ist die Reihenfolge von `u` und `v` egal
  */
-vec2 vml::operator + (const vec2& u, const vec2& v)
+Vec2 vml::operator + (const Vec2& u, const Vec2& v)
 {
-    return vec2(u.x + v.x, u.y + v.y);
+    return Vec2(u.x + v.x, u.y + v.y);
 }
 
 /**
@@ -122,9 +122,9 @@ vec2 vml::operator + (const vec2& u, const vec2& v)
  *
  * Die Differenz von zwei Vektoren oder Punkten. Der resultierende Vektor entspricht dem Vektor zwischen den Punkten `u` und `v` (Spitze minus Anfang).
  */
-vec2 vml::operator - (const vec2& u, const vec2& v)
+Vec2 vml::operator - (const Vec2& u, const Vec2& v)
 {
-    return vec2(u.x - v.x, u.y - v.y);
+    return Vec2(u.x - v.x, u.y - v.y);
 }
 
 ///@{
@@ -133,13 +133,13 @@ vec2 vml::operator - (const vec2& u, const vec2& v)
  *
  * Die Skalierung eines Vektors `v` um einen `factor`. Die die Koordinaten des Vektors werden alle mit `factor` multipliziert.
  */
-vec2 vml::operator * (float factor, const vec2& v)
+Vec2 vml::operator * (float factor, const Vec2& v)
 {
-    return vec2(factor * v.x, factor * v.y);
+    return Vec2(factor * v.x, factor * v.y);
 }
-vec2 vml::operator * (const vec2& v, float factor)
+Vec2 vml::operator * (const Vec2& v, float factor)
 {
-    return vec2(factor * v.x, factor * v.y);
+    return Vec2(factor * v.x, factor * v.y);
 }
 ///@}
 
@@ -148,9 +148,9 @@ vec2 vml::operator * (const vec2& v, float factor)
  *
  * Die Division eines Vektors `v` und eines Skalars `divident` entspricht der Multiplikation mit dem Kehrwert von `divident`. Diese Operation ist allerdings nicht kommutativ.
  */
-vec2 vml::operator / (const vec2& v, float divident)
+Vec2 vml::operator / (const Vec2& v, float divident)
 {
-    return vec2(v.x / divident, v.y / divident);
+    return Vec2(v.x / divident, v.y / divident);
 }
 
 /**
@@ -160,9 +160,9 @@ vec2 vml::operator / (const vec2& v, float divident)
  *
  * @param angle Winkel zwischen x-Achse und resultierendem Vektor
  */
-vec2 vml::polar(float angle)
+Vec2 vml::polar(float angle)
 {
-    return vec2(cos(angle), sin(angle));
+    return Vec2(cos(angle), sin(angle));
 }
 
 /**
@@ -171,9 +171,9 @@ vec2 vml::polar(float angle)
  * Die Länge der Differenz aus zwei Vektoren.
  * Die Reihenfolgen von u und v spielt keine Rolle.
  */
-float vml::distance(const vec2& u, const vec2& v)
+float vml::distance(const Vec2& u, const Vec2& v)
 {
-    vec2 d{u - v};
+    Vec2 d{u - v};
     return d.norm();
 }
 
@@ -182,7 +182,7 @@ float vml::distance(const vec2& u, const vec2& v)
  *
  * Berechnet das Skaraprodukt von zwei Vektoren `u` und `v`.
  */
-float vml::dot(const vec2& u, const vec2& v)
+float vml::dot(const Vec2& u, const Vec2& v)
 {
     return u.x * v.x + u.y * v.y;
 }
@@ -192,15 +192,15 @@ float vml::dot(const vec2& u, const vec2& v)
 
 
 /**
- * @brief String Parsing vec2.
+ * @brief String Parsing Vec2.
  *
  * Ließt die daten von einem String und schriebt sie in einen Vec2.
  * Bei einem erfolgreichen Parsing wird true zurückgegeben.
  * Der String sollte im Tupelformat  "(x,y)" sein um korrekt gelesen zu werden. Whitespaces werden vorher entfernt
- * @param v2 Referenz zu einem vec2
- * @param s vec2 als string.
+ * @param v2 Referenz zu einem Vec2
+ * @param s Vec2 als string.
  */
-bool ::vml::parse::stoV2(vec2& v2, const String& s)
+bool ::vml::parse::stoV2(Vec2& v2, const String& s)
 {
     // find indicies of special characters
     const auto bl{ s.find_first_of("(") }; // left bracket
@@ -208,7 +208,7 @@ bool ::vml::parse::stoV2(vec2& v2, const String& s)
     const auto br{ s.find_first_of(")") }; // right bracket
     // return false if one of them doesn't exist
     if (bl==String::npos || cm==String::npos || br==String::npos) return false;
-    // write data to vec2 reference
+    // write data to Vec2 reference
     try {
     v2.x = std::stof(s.substr(bl + 1, cm));
     v2.y = std::stof(s.substr(cm + 1, br));
@@ -222,7 +222,7 @@ bool ::vml::parse::stoV2(vec2& v2, const String& s)
  * Vec2-Vector hat als String dieses Format: "[ (x1, y1), (x2, y2), ..., (xn, yn) ]".
  * Dabei darf nur jedes zweite Komma als Trennzeichen des Vectors interpretiert werden.
  */
-bool vml::parse::stoV2vec(std::vector<vec2>& v2v, const String& s)
+bool vml::parse::stoV2vec(std::vector<Vec2>& v2v, const String& s)
 {
     v2v.clear();
     // find opening brace
@@ -237,8 +237,8 @@ bool vml::parse::stoV2vec(std::vector<vec2>& v2v, const String& s)
         stop = s.find_first_of(",", stop+1);
         // no second comma, means last element
         if (stop==String::npos) break;
-        // try to parse vec2 from string and push back
-        vec2 v;
+        // try to parse Vec2 from string and push back
+        Vec2 v;
         if (!stoV2(v, s.substr(start+1, stop))) return false;
         v2v.push_back(v);
         // find next comma
@@ -250,8 +250,8 @@ bool vml::parse::stoV2vec(std::vector<vec2>& v2v, const String& s)
     if (stop==String::npos) return false;
     // empty vector is possible
     if (s[start]=='[') return true;
-    // try to parse vec2 from string and push back
-    vec2 v;
+    // try to parse Vec2 from string and push back
+    Vec2 v;
     if (!stoV2(v, s.substr(start+1, stop))) return false;
     v2v.push_back(v);
     v2v.shrink_to_fit();
@@ -262,11 +262,11 @@ bool vml::parse::stoV2vec(std::vector<vec2>& v2v, const String& s)
 /**
  * @brief Vec2 als ein String.
  *
- * Konvertiert den vec2 in einen string.
+ * Konvertiert den Vec2 in einen string.
  * Es wird das Klammerformat `(x,y)` verwendet, da es mit der TikZ-Syntax kombinierbar ist.
- * @param v2 Referenz zu einem vec2
+ * @param v2 Referenz zu einem Vec2
  */
-std::string vml::parse::to_string(const vec2& v)
+std::string vml::parse::to_string(const Vec2& v)
 {
     std::stringstream ss;
     ss << '(' << v.x << ',' << v.y << ')';
@@ -282,7 +282,7 @@ std::string vml::parse::to_string(const vec2& v)
  * @param os Outstream (cout)
  * @param v ein Vec2
  */
-std::ostream& vml::operator<< (std::ostream& os, const vec2& v)
+std::ostream& vml::operator<< (std::ostream& os, const Vec2& v)
 {
     os << parse::to_string(v);
     return os;

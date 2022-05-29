@@ -13,7 +13,7 @@ using namespace vml;
  * @param rot Rotationswinkel
  * @param off Versatz (Offset)
  */
-void ArcShape::transfrom(float rot, vec2 off)
+void ArcShape::transfrom(float rot, Vec2 off)
 {
     for (Arc& a : (*this)) a.transfrom(rot, off);
 }
@@ -25,10 +25,10 @@ void ArcShape::transfrom(float rot, vec2 off)
  * Es wird eine Liste möglicher Kandidaten bestimmt und zurückgegeben.
  * Jeder Bogen der List darf einen Kandidaten liefern.
  */
-std::vector<vec2> ArcShape::lowest_points() const
+std::vector<Vec2> ArcShape::lowest_points() const
 {
     // erstelle eine leere Punkte liste
-    std::vector<vec2> points{};
+    std::vector<Vec2> points{};
     
     for (const Arc& a : (*this))
     {
@@ -43,15 +43,15 @@ std::vector<vec2> ArcShape::lowest_points() const
 /**
  * @brief Diskretisierung (zu einem Polygon).
  *
- * Erstellt eine Punkteliste (`std::vector<vec2>`), welche durch das Aufrufen von [discretize](@name Arc.discretize) für jeden Bogen gefüll wird.
+ * Erstellt eine Punkteliste (`std::vector<Vec2>`), welche durch das Aufrufen von [discretize](@name Arc.discretize) für jeden Bogen gefüll wird.
  * ACHTUNG: Die List wird als Pointer zurückgegeben, vergiss nicht die Daten nach dem Bnutzen wieder zu löschen.
  *
  * @param res Winkelauflüsung. Wird an [discretize](@name Arc.discretize()) weitergereicht.
  */
-std::vector<vec2>* ArcShape::discretize(float res) const
+std::vector<Vec2>* ArcShape::discretize(float res) const
 {
     // erstelle einen Pointer zu einer leeren Punktliste
-    std::vector<vec2>* points{ new std::vector<vec2>() };
+    std::vector<Vec2>* points{ new std::vector<Vec2>() };
     // lass jeden Bogen die List befüllen
     for (const Arc& a : (*this))
         a.discretize(*points, res);
@@ -61,7 +61,7 @@ std::vector<vec2>* ArcShape::discretize(float res) const
 /// discretize with requested output size
 /// calls discretize() but tries to figuer out the correct angular resolution so output vector matches requested size
 /// @param requested_size size of output vector
-std::vector<vec2>* ArcShape::discretize(int requested_size) const
+std::vector<Vec2>* ArcShape::discretize(int requested_size) const
 {
     // if requested size smaller than number of arcs, retun just staring positions
     if (requested_size < size())

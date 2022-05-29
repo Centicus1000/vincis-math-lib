@@ -1,4 +1,4 @@
-#include "vml/arc.h"
+#include "vml/Arc.h"
 
 #include <sstream>
 
@@ -94,7 +94,7 @@ float Arc::central_angle() const
  * Der Mittelpunkt befindet sich rechtwinklig zum Startwinkel um den Radius entfernt von der Startposition.
  * ACHTUNG: bei geraden Bögen existiert kein MIttelpunkt und hier wird durch 0 geteilt.
  */
-vec2 Arc::center() const
+Vec2 Arc::center() const
 {
     return srt + polar(ang + pi/2.f) / crv;
 }
@@ -126,7 +126,7 @@ bool Arc::reaches(float psi) const
  *
  * @param l eine (Bogen-)Länge
  */
-vec2 Arc::at_length(float l) const
+Vec2 Arc::at_length(float l) const
 {
     // für gerade Bögen (Strecken, crv==0)
     if (is_straight()) return srt + l * vml::polar(ang);
@@ -140,7 +140,7 @@ vec2 Arc::at_length(float l) const
  * Anders als `srt` muss `end` nicht mit gespeichert werden, da er sich aus den anderen Attributen ableiten lässt.
  * Der Endpunkt des Bogens lässt sich bestimmen indem man die Bogenlänge `lng` als Parameter an `at_length` übergibt.
  */
-vec2 Arc::end() const
+Vec2 Arc::end() const
 {
     return at_length(lng);
 }
@@ -154,7 +154,7 @@ vec2 Arc::end() const
  *
  * @param psi absoluter Winkel in Radiant
  */
-vec2 Arc::at_angle(float psi) const
+Vec2 Arc::at_angle(float psi) const
 {
     return center() + vml::polar(psi) / abs(crv);
 }
@@ -173,7 +173,7 @@ vec2 Arc::at_angle(float psi) const
  * @param rot Rotierungwinkel in Radiant
  * @param off Versatz (Offset), default = (0,0)
  */
-void Arc::transfrom(float rot, vec2 off = vec2(0.f))
+void Arc::transfrom(float rot, Vec2 off = Vec2(0.f))
 {
     ang += rot;
     srt = srt.rotated(rot) + off;
@@ -182,16 +182,16 @@ void Arc::transfrom(float rot, vec2 off = vec2(0.f))
 /**
  * @brief Diskretisierung (zu einem Polygon)
  *
- * Wandelt den Bogen in ein Polygon (`std::vector` aus `vec2`) in dem an diskreten Längen zwischen 0 und `lng` abgetastet wird.
+ * Wandelt den Bogen in ein Polygon (`std::vector` aus `Vec2`) in dem an diskreten Längen zwischen 0 und `lng` abgetastet wird.
  * Die Abtastung erfolgt über die Funktion [at_length](@ref at_length).
  * Die Auflösung wird in Radiant als Winkel angegeben, damit starktgekrümmte Bögen öfter und wenig gekrümmte Bögen seltener abgetastet werden und die Polygone skalierungs unabhängig sind.
  * Dadurch ist die Anzahl der Abtastungen gleich [central_angle](@ref central_angle)/´res´. Die Abtastung ist inklusive des Startpunktes aber exklusive des Endpunktes.
  * Gerade Segemente Segmente liefern dadurch nur ihren Startpunkt.
  *
- * @param [out] output Referrenz zu einem vec2-vector, in welchem die Abtastungen gespeichert werden sollen.
+ * @param [out] output Referrenz zu einem Vec2-vector, in welchem die Abtastungen gespeichert werden sollen.
  * @param res Auflösung in Radiant, Abstand zwischen zwei diskreten Abtastungen. Default = 0.3.
  */
-void Arc::discretize(std::vector<vec2> &output, float res) const
+void Arc::discretize(std::vector<Vec2> &output, float res) const
 {
     // speicher die Startposition in jedem Fall
     output.push_back(srt);
@@ -207,7 +207,7 @@ void Arc::discretize(std::vector<vec2> &output, float res) const
     // taste den Bogen mit at_length ab
     for (int i{1}; i<N; i++)
     {
-        vec2 p{ at_length(i * increment) };
+        Vec2 p{ at_length(i * increment) };
         output.push_back(p);
     }
 }
@@ -224,7 +224,7 @@ std::string Arc::tikz() const
     std::stringstream ss;
     if (is_straight())
     {
-        vec2 e{ end() };
+        Vec2 e{ end() };
         ss << "-- (" << e.x << "," << e.y << ") ";
     }
     else
