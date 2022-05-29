@@ -1,5 +1,5 @@
-#ifndef vml_vec2_hpp
-#define vml_vec2_hpp
+#ifndef vml_vec2_h
+#define vml_vec2_h
 
 #include "basics.h"
 #include "parse.h" // vec2.h add some functionaliy to parse namespace
@@ -41,8 +41,6 @@ struct vec2
     void operator -= (const vec2&);
     void operator *= (float);
     void operator /= (float);
-    
-    friend std::ostream& operator << (std::ostream&, const vec2&);
 };
 
 // ----------------------------------------------
@@ -53,6 +51,7 @@ vec2 operator - (const vec2& u, const vec2& v);
 vec2 operator * (float factor, const vec2& v);
 vec2 operator * (const vec2& v, float factor);
 vec2 operator / (const vec2& v, float divident);
+std::ostream& operator << (std::ostream&, const vec2&);
 
 
 vec2 polar(float angle);
@@ -70,4 +69,4 @@ String to_string(const vec2&);
 } /* namespace parse */
 
 } /* namespace vml */
-#endif /* vml_vec2_hpp */
+#endif /* vml_vec2_h */

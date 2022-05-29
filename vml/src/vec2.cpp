@@ -282,7 +282,7 @@ std::string vml::parse::to_string(const vec2& v)
  * @param os Outstream (cout)
  * @param v ein Vec2
  */
-std::ostream& ::vml::operator<< (std::ostream& os, const vec2& v)
+std::ostream& vml::operator<< (std::ostream& os, const vec2& v)
 {
     os << parse::to_string(v);
     return os;
