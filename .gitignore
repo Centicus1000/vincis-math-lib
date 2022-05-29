@@ -114,3 +114,5 @@ Temporary Items
 
 ### Custom ###
 build
+docu/html/*
+docu/latex/*
