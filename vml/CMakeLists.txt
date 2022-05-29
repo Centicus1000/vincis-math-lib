@@ -2,17 +2,16 @@ SET(VML_SOURCE_FILES
    src/Vec2.cpp
    src/Vec3.cpp
    src/Vec4.cpp
-   src/mat4.cpp
+   src/Mat4.cpp
    src/Arc.cpp
-   src/arcshape.cpp
-   src/cashew.cpp
-   src/complex.cpp
-   src/polynomial.cpp
+   src/ArcShape.cpp
+   src/Cashew.cpp
+   src/Complex.cpp
+   src/Polynomial.cpp
    src/fft.cpp
    src/parse.cpp
-   src/interval.cpp
-   src/base.cpp
-   src/cardgame.cpp
+   src/Interval.cpp
+   src/Base.cpp
 )
 
 SET(VML_HEADER_FILES
@@ -20,18 +19,17 @@ SET(VML_HEADER_FILES
    Vec2.h
    Vec3.h
    Vec4.h
-   mat4.h
+   Mat4.h
    Arc.h
-   arcshape.h
-   cashew.h
-   graph.h
-   complex.h
-   polynomial.h
+   ArcShape.h
+   Cashew.h
+   Graph.h
+   Complex.h
+   Polynomial.h
    fft.h
    parse.h
-   interval.h
-   base.h
-   cardgame.h
+   Interval.h
+   Base.h
 )
 
 add_library(vml ${VML_SOURCE_FILES} ${VML_HEADER_FILES})
