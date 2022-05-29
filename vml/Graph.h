@@ -37,7 +37,7 @@ public:
      * Sie entspricht dem [`std::size_t`-Typen](https://en.cppreference.com/w/cpp/types/size_t), welcher einem Integraltypen ohne Vorzeichen entspricht.
      */
     typedef std::size_t Key;
-    
+
     /**
      * @brief Nonode (Kein Knoten).
      *
@@ -45,8 +45,8 @@ public:
      * durch den static_cast von -1 auf den Key typen, welcher intern ein unsigned long ist wird automatisch die höchstmögliche Zahl genommen.
      */
     static constexpr Key nonode{ static_cast<Key>(-1) };
-    
-    
+
+
     /**
      * @brief Kantentyp.
      *
@@ -190,7 +190,9 @@ public:
         return *adjacencies[node];
     }
     ///@}
-    
+
+
+	//@Todo: Docu
     bool is_edge(Key parent, Key child) const
     {
         // get reference to adjacencies of parent
@@ -204,7 +206,7 @@ public:
         // return true if found
         return found != elist.end();
     }
-    
+
     /**
      * @brief Kanten löschen.
      *
@@ -217,10 +219,6 @@ public:
         adjacencies.clear();
     }
 
-
-    /// children
-    /// returns a vector of indices pointing towards the child nodes of given parent node
-    /// @param parent idex of parent node
     /**
      * @brief Unmittelbaren Nachbarknoten (Kinder).
      *
