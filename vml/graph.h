@@ -192,6 +192,20 @@ public:
     }
     ///@}
     
+    bool is_edge(Key parent, Key child) const
+    {
+        // get reference to adjacencies of parent
+        const std::vector<Edge>& elist{ edges(parent) };
+        // create a lambda to find child
+        auto is_child
+        {
+            [child] (const Edge& e) { return child == e.child; }
+        };
+        auto found{ std::find_if(elist.begin(), elist.end(), is_child) };
+        // return true if found
+        return found != elist.end();
+    }
+    
     /**
      * @brief Kanten löschen.
      *
@@ -259,11 +273,11 @@ public:
      * @param predicate Eine Lambda-Funktion, die eine Kanten Referenz als Eingang nimmt.
      */
     ///@{
-    void for_nodes(const std::template function<void(N&)>& predicate)
+    void for_nodes(const std::function<void(N&)>& predicate)
     {
         for (N& nref : nodes) predicate( nref );
     }
-    void for_nodes(const std::template function<void(const N&)>& predicate) const
+    void for_nodes(const std::function<void(const N&)>& predicate) const
     {
         for (const N& nref : nodes) predicate( nref );
     }
