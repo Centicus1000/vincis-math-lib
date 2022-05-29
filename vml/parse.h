@@ -1,5 +1,4 @@
-#ifndef vml_parse_hpp
-#define vml_parse_hpp
+#pragma once
 
 #include <string>
 #include <sstream>
@@ -90,5 +89,3 @@ bool stov(std::vector<T>& v,
 
 } /* namespace parse */
 } /* namespace vml */
-
-#endif /* vml_parse_hpp */

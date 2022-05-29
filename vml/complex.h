@@ -1,5 +1,4 @@
-#ifndef vml_complex_hpp
-#define vml_complex_hpp
+#pragma once
 
 #include "basics.h"
 
@@ -57,5 +56,3 @@ Complex c_sqrt(const Complex& u);
 const Complex J { Complex(1.f, .5f * pi) };
 
 } /* vml */
-
-#endif /* vml_complex_hpp */

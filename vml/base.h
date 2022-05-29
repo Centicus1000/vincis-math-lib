@@ -1,5 +1,4 @@
-#ifndef vml_base_hpp
-#define vml_base_hpp
+#pragma once
 
 #include "basics.h"
 #include "parse.h"
@@ -59,5 +58,3 @@ String to_string(const Digits&);
 } /* namespace parse */
 
 } /* namespace vml */
-
-#endif /* vml_base_hpp */

@@ -1,5 +1,4 @@
-#ifndef vml_cashew_h
-#define vml_cashew_h
+#pragma once
 
 #include "arcshape.h"
 #include "parse.h"
@@ -41,4 +40,3 @@ String to_string(const Cashew&);
 } /* namespace parse */
 
 } /* vml */
-#endif /* vml_cashew_h */

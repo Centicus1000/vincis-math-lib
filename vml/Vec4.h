@@ -1,5 +1,4 @@
-#ifndef vml_Vec4_h
-#define vml_Vec4_h
+#pragma once
 
 #include "basics.h"
 
@@ -73,4 +72,3 @@ float distance(const Vec4& u, const Vec4& v);
 float dot(const Vec4& u, const Vec4& v);
 
 } /* vml */
-#endif /* vml_Vec4_h */

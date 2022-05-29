@@ -1,8 +1,7 @@
-#ifndef vml_arc_h
-#define vml_arc_h
+#pragma once
 
 #include "basics.h"
-#include "vec2.h"
+#include "Vec2.h"
 
 #include <array>
 #include <vector>
@@ -78,4 +77,3 @@ struct Arc
 };
 
 } /* vml */
-#endif /* vml_arc_h */

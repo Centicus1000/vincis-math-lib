@@ -1,5 +1,4 @@
-#ifndef vml_shape_h
-#define vml_shape_h
+#pragma once
 
 #include "Arc.h"
 
@@ -29,4 +28,3 @@ public:
 };
 
 } /* vml */
-#endif /* vml_shape_h */

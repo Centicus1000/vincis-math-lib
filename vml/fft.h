@@ -1,5 +1,4 @@
-#ifndef vml_fft_hpp
-#define vml_fft_hpp
+#pragma once
 
 #include "basics.h"
 #include "complex.h"
@@ -31,5 +30,3 @@ std::vector<Complex> fft(const std::vector<float>&);
 std::vector<Complex> ifft(const std::vector<Complex>&);
 
 } /* vml */
-
-#endif /* vml_fft_hpp */

@@ -1,9 +1,8 @@
-#ifndef vml_mat4_h
-#define vml_mat4_h
+#pragma once
 
 #include "basics.h"
-#include "vec3.h"
-#include "vec4.h"
+#include "Vec3.h"
+#include "Vec4.h"
 
 namespace vml {
 
@@ -55,4 +54,3 @@ mat4 lookat(const Vec3&, const Vec3&, const Vec3&);
 mat4 ortho(float left, float right, float bottom, float top, float nearVal, float farVal);
 
 } /* vml */
-#endif /* vml_mat4_h */

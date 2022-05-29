@@ -1,5 +1,4 @@
-#ifndef vml_Vec3_h
-#define vml_Vec3_h
+#pragma once
 
 #include "basics.h"
 
@@ -63,4 +62,3 @@ Vec3 orbit(float yaw, float pitch);
 Vec3 cross(const Vec3& a, const Vec3& b);
 
 } /* vml */
-#endif /* vml_Vec3_h */

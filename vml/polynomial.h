@@ -1,9 +1,7 @@
-#ifndef vml_polynomial_hpp
-#define vml_polynomial_hpp
+#pragma once
 
 #include "basics.h"
 #include "complex.h"
-
 
 #include <vector>
 
@@ -66,5 +64,3 @@ template <typename T> T Polynomial::operator() (const T& x) const
 }
 
 } /* vml */
-
-#endif /* vml_polynomial_hpp */

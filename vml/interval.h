@@ -1,5 +1,4 @@
-#ifndef vml_interval_hpp
-#define vml_interval_hpp
+#pragma once
 
 #include "basics.h"
 #include "parse.h"
@@ -41,5 +40,3 @@ String to_string(const Interval&);
 } /* namespace parse */
 
 } /* namespace vml */
-
-#endif /* vml_interval_hpp */

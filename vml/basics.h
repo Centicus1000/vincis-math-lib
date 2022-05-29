@@ -1,5 +1,4 @@
-#ifndef vml_basics_h
-#define vml_basics_h
+#pragma once
 
 #include <iostream> // printing
 #include <cmath> // to use math every where
@@ -90,4 +89,3 @@ inline float lerp(float x, float imin, float imax, float omin, float omax)
 }
 
 } /* vml namspace */
-#endif /* vml_basics_h */

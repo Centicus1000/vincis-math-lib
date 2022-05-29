@@ -1,5 +1,4 @@
-#ifndef vml_graph_hpp
-#define vml_graph_hpp
+#pragma once
 
 #include "basics.h"
 
@@ -309,5 +308,3 @@ private:
 };
 
 } /* vml */
-
-#endif /* vml_graph_hpp */

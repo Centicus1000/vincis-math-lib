@@ -1,4 +1,4 @@
-#include "vml/vec3.h"
+#include "vml/Vec3.h"
 
 using namespace vml;
 

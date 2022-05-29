@@ -1,5 +1,4 @@
-#ifndef vml_cardgame_h
-#define vml_cardgame_h
+#pragma once
 
 #include <iostream>
 #include <vector>
@@ -61,5 +60,3 @@ public:
 } /* namespace cardgame */
 
 } /* namespace vml */
-
-#endif /* vml_cardgame_h */
