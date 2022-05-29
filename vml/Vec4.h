@@ -14,14 +14,14 @@ namespace vml {
  */
 struct Vec4
 {
-    /// vector dimenisions
+    /// vector dimensions
     static const int size{ 4 };
 
     // Attributes
     /**
-     * @brief The Coordinates. namez
+     * @brief The Coordinates.
      *
-     * The coordinates are stored as named members of the Vec4-struct to allow for convient member call via the `.`-operator.
+     * The coordinates are stored as named members of the Vec4-struct to allow for convenient member call via the `.`-operator.
      */
     float x, y, z, w;
 
@@ -31,9 +31,9 @@ struct Vec4
     Vec4();
 
     /**
-     * @brief Temaplated Array Constructor.
+     * @brief Templated Array Constructor.
      *
-     * Enables initializasion of a Vec4 by passing an instance of a type that support the subscription operator, e.g. std::vector or std::array. This enable easy conversion from other C++libraries to vml-compatible data.
+     * Enables initialisation of a Vec4 by passing an instance of a type that support the subscription operator, e.g. std::vector or std::array. This enable easy conversion from other C++libraries to vml-compatible data.
      */
     template<typename ArrayType>
     Vec4(const ArrayType& data) :
