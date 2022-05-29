@@ -1,4 +1,4 @@
-#include "vml/interval.h"
+#include "vml/Interval.h"
 
 using namespace vml;
 

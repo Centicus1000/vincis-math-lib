@@ -1,6 +1,6 @@
 #pragma once
 
-#include "arcshape.h"
+#include "ArcShape.h"
 #include "parse.h"
 
 namespace vml {

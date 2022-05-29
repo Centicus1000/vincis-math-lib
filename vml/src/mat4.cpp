@@ -1,4 +1,4 @@
-#include "vml/mat4.h"
+#include "vml/Mat4.h"
 
 using namespace vml;
 
@@ -9,14 +9,14 @@ using namespace vml;
  * @brief Vektor Konstruktor.
  *
  * Initialisiert die Matrix über vier Zeilenvektoren, damit folgende Schreibweise möglich wird:
- *  `mat4{
+ *  `Mat4{
  *      Vec4(d, 0, 0, 0),
  *      Vec4(0, d, 0, 0),
  *      Vec4(0, 0, d, 0),
  *      Vec4(0, 0, 0, d) };
  *  `
  */
-mat4::mat4(const Vec4& ex, const Vec4& ey, const Vec4& ez, const Vec4& ew) :
+Mat4::Mat4(const Vec4& ex, const Vec4& ey, const Vec4& ez, const Vec4& ew) :
 M{
     ex.x, ex.y, ex.z, ex.w,
     ey.x, ey.y, ey.z, ey.w,
@@ -32,8 +32,8 @@ M{
  *
  * @param d der Wert auf der Hauptdiagonalen.
  */
-mat4::mat4(float d) :
-mat4(Vec4(d, 0, 0, 0),
+Mat4::Mat4(float d) :
+Mat4(Vec4(d, 0, 0, 0),
      Vec4(0, d, 0, 0),
      Vec4(0, 0, d, 0),
      Vec4(0, 0, 0, d))
@@ -44,7 +44,7 @@ mat4(Vec4(d, 0, 0, 0),
  *
  * Ruft den Diagonal Konstruktor mit dem Parameter 1 auf, wodruch eine Einheitsmatrix erschaffen wird.
  */
-mat4::mat4() : mat4(1.f)
+Mat4::Mat4() : Mat4(1.f)
 {}
 
 // ----------------------------------------------
@@ -56,7 +56,7 @@ mat4::mat4() : mat4(1.f)
  * Gibt den Pointer zum ersten Eintrag zurück.
  * Diese Funktion wird häufig in OpenGL verwendet, um Matrizen in Shader zu laden.
  */
-float* mat4::data()
+float* Mat4::data()
 {
     return &M[0];
 }
@@ -67,11 +67,11 @@ float* mat4::data()
  *
  * Übergibt den Index an den internen Datenspeicher `M`, wodurch alle 16 Einträge direkt zugänglich sind.
  */
-float& mat4::operator[] (int i)
+float& Mat4::operator[] (int i)
 {
     return M[i];
 }
-const float& mat4::operator[] (int i) const
+const float& Mat4::operator[] (int i) const
 {
     return M[i];
 }
@@ -86,11 +86,11 @@ const float& mat4::operator[] (int i) const
  * @param row Index der Zeile
  * @param col Index der Spalte
  */
-float& mat4::at(int row, int col)
+float& Mat4::at(int row, int col)
 {
     return M[row * v_size + col];
 }
-float mat4::at(int row, int col) const
+float Mat4::at(int row, int col) const
 {
     return M[col * v_size + row];
 }
@@ -101,7 +101,7 @@ float mat4::at(int row, int col) const
  *
  * Erstellt einen Vec4 auf den Einträgen in der Zeile und gibt diesen zurück. Die Referenz zu den Daten geht dabei verloren
  */
-Vec4 mat4::row(int i) const
+Vec4 Mat4::row(int i) const
 {
     return Vec4(at(i,0), at(i,0), at(i,0), at(i,0));
 }
@@ -111,7 +111,7 @@ Vec4 mat4::row(int i) const
  *
  * Erstellt einen Vec4 auf den Einträgen in der Spalten und gibt diesen zurück. Die Referenz zu den Daten geht dabei verloren
  */
-Vec4 mat4::col(int i) const
+Vec4 Mat4::col(int i) const
 {
     return Vec4(at(0,i), at(1,i), at(2,i), at(3,i));
 }
@@ -129,7 +129,7 @@ Vec4 mat4::col(int i) const
  * @param center Specifies the position of the reference point
  * @param up Specifies the direction of the up vector
  */
-mat4 vml::lookat(const Vec3& from, const Vec3& to, const Vec3& up = Vec3(0, 1, 0))
+Mat4 vml::lookat(const Vec3& from, const Vec3& to, const Vec3& up = Vec3(0, 1, 0))
 {
     Vec3 f{ (from-to).normalized() };
     Vec3 s{ cross(f,up).normalized() };
@@ -139,7 +139,7 @@ mat4 vml::lookat(const Vec3& from, const Vec3& to, const Vec3& up = Vec3(0, 1, 0
     Vec4 ey {s.y, u.y, f.y, 0};
     Vec4 ez {s.z, u.z, f.z, 0};
     Vec4 ew {  0,   0,   0, 1};
-    return mat4(ex, ey, ez, ew);
+    return Mat4(ex, ey, ez, ew);
 }
 
 /**
@@ -155,7 +155,7 @@ mat4 vml::lookat(const Vec3& from, const Vec3& to, const Vec3& up = Vec3(0, 1, 0
  * @param near gibt den Abstand zur nahen Clipping-Ebene in der Tiefe an. Wenn diese Ebenen hinter dem Betrachter ist, ist dieser Wert negativ
  * @param far gibt den Abstand zu fernen Clipping-Ebene in der Tiefe an.
  */
-mat4 vml::ortho(float left, float right, float bottom, float top, float near, float far)
+Mat4 vml::ortho(float left, float right, float bottom, float top, float near, float far)
 {
     return {
         Vec4{ 2.f/(right-left), 0, 0, -(right+left)/(right-left) },
@@ -176,15 +176,15 @@ mat4 vml::ortho(float left, float right, float bottom, float top, float near, fl
  * @param os Outstream (cout)
  * @param m eine Mat4
  */
-std::ostream& ::vml::operator << (std::ostream& os, const mat4& m) {
+std::ostream& ::vml::operator << (std::ostream& os, const Mat4& m) {
     os << "(";
-    for (int row{0}; row < mat4::v_size; row++) {
+    for (int row{0}; row < Mat4::v_size; row++) {
         os << "\t";
-        for (int col{0}; col < mat4::v_size; col++) {
+        for (int col{0}; col < Mat4::v_size; col++) {
             os << m.at(row, col);
-            os << ((col < mat4::v_size-1) ? "," : "");
+            os << ((col < Mat4::v_size-1) ? "," : "");
         }
-        os << ((row < mat4::v_size-1) ? "" : "\t)") << "\n";
+        os << ((row < Mat4::v_size-1) ? "" : "\t)") << "\n";
     }
     os << std::endl;
     return os;

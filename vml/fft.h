@@ -1,7 +1,7 @@
 #pragma once
 
-#include "basics.h"
-#include "complex.h"
+#include "Basics.h"
+#include "Complex.h"
 
 #include <vector>
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "basics.h"
+#include "Basics.h"
 #include "Vec3.h"
 #include "Vec4.h"
 
@@ -15,7 +15,7 @@ namespace vml {
  * Intern ist sind die Einträge als eine c-Style array gespeichert.
  * @Todo: matmul, transpose, det
  */
-struct mat4
+struct Mat4
 {
     /// Anzahl der Vec4-Vektor pro Matrix, bzw. Anzahl der Reihen oder Spalten
     static const int v_size {  4 };
@@ -26,9 +26,9 @@ struct mat4
     float M[f_size];
     
     // Konstruktoren
-    mat4(const Vec4&, const Vec4&, const Vec4&, const Vec4&);
-    mat4(float);
-    mat4();
+    Mat4(const Vec4&, const Vec4&, const Vec4&, const Vec4&);
+    Mat4(float);
+    Mat4();
     
     // Zugang zu Einträgen
     float* data();
@@ -44,13 +44,13 @@ struct mat4
     float det();
     
     // printing
-    friend std::ostream& operator << (std::ostream& os, const mat4& m);
+    friend std::ostream& operator << (std::ostream& os, const Mat4& m);
 };
 
 // ----------------------------------------------
 // Namespace Methoden
 
-mat4 lookat(const Vec3&, const Vec3&, const Vec3&);
-mat4 ortho(float left, float right, float bottom, float top, float nearVal, float farVal);
+Mat4 lookat(const Vec3&, const Vec3&, const Vec3&);
+Mat4 ortho(float left, float right, float bottom, float top, float nearVal, float farVal);
 
 } /* vml */

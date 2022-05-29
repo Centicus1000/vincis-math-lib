@@ -15,7 +15,7 @@ SET(VML_SOURCE_FILES
 )
 
 SET(VML_HEADER_FILES
-   basics.h
+   Basics.h
    Vec2.h
    Vec3.h
    Vec4.h

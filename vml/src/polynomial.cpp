@@ -1,4 +1,4 @@
-#include "vml/polynomial.h"
+#include "vml/Polynomial.h"
 #include "vml/fft.h" // for efficient polynomial multiplication
 
 using namespace vml;
