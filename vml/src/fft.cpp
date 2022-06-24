@@ -55,8 +55,8 @@ cvector vml::fft(const fvector& fvec)
     cvector cvec (n);
     for (int i{0}; i<n/2; i++)
     {
-        cvec[i    ] = ce[i] + c_pow(w, i) * co[i];
-        cvec[i+n/2] = ce[i] - c_pow(w, i) * co[i];
+        cvec[i    ] = ce[i] + pow(w, i) * co[i];
+        cvec[i+n/2] = ce[i] - pow(w, i) * co[i];
     }
     return cvec;
 }
@@ -80,8 +80,8 @@ cvector vml::ifft(const cvector& cvec)
     cvector fvec (n);
     for (int i{0}; i<n/2; i++)
     {
-        fvec[i    ] = .5f*(fe[i] + c_pow(w, i) * fo[i]);
-        fvec[i+n/2] = .5f*(fe[i] - c_pow(w, i) * fo[i]);
+        fvec[i    ] = .5f*(fe[i] + pow(w, i) * fo[i]);
+        fvec[i+n/2] = .5f*(fe[i] - pow(w, i) * fo[i]);
     }
     return fvec;
 }

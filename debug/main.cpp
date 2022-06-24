@@ -1,21 +1,15 @@
-#include "vml/cardgame.h"
-
-#include <array>
-#include <iostream>
+#include "vml/Polynomial.h"
 
 int main() {
+    using namespace vml;
     
-    using namespace vml::cardgame;
-    
-    Deck deck{};
-    deck.shuffle();
-    
-    std::cout << deck << std::endl;
+    Polynomial p({1.f, 2.f, 3.f, 4.f});
+    std::cout << p << std::endl;
 
-    Hand hand{};
-    hand.draw(deck, 4);
-
-    std::cout << deck << std::endl;
-    std::cout << hand << std::endl;
+    
+    auto s{ parse::toString(p) };
+    Polynomial q;
+    if (parse::stoPolynomial(q, s)) std::cout << q << std::endl;
+    else std::cout << "nope" << std::endl;
 }
 

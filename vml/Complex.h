@@ -11,27 +11,27 @@ namespace vml {
 struct Complex
 {
     // attributes
-    float ampli;
-    float phase;
+    Float ampli;
+    Float phase;
     
     // constructors
     Complex();
-    Complex(float);
-    Complex(float,float);
+    Complex(Float);
+    Complex(Float,Float);
     
     // methods
-    float re() const;
-    float im() const;
+    Float re() const;
+    Float im() const;
     
     void conjugate();
     Complex conjugated() const;
     
     // operators
     Complex operator-() const;
-    void operator+= (const Complex&);
-    void operator-= (const Complex&);
-    void operator*= (const Complex&);
-    void operator/= (const Complex&);
+    void operator += (const Complex&);
+    void operator -= (const Complex&);
+    void operator *= (const Complex&);
+    void operator /= (const Complex&);
 
     // printing
     friend std::ostream& operator << (std::ostream& os, const Complex& v);
@@ -43,14 +43,14 @@ Complex operator * (const Complex& u, const Complex& v);
 Complex operator / (const Complex& u, const Complex& v);
 
 // cartesian arithmetic
-Complex cartesian(float re, float im);
+Complex cartesian(Float re, Float im);
 Complex operator + (const Complex& u, const Complex& v);
 Complex operator - (const Complex& u, const Complex& v);
 
-// power funtions
-Complex c_pow(const Complex& u, const Complex& v);
-Complex c_exp(const Complex& u);
-Complex c_sqrt(const Complex& u);
+// power functions
+Complex pow(const Complex& u, const Complex& v);
+Complex exp(const Complex& u);
+Complex sqrt(const Complex& u);
 
 // constants
 const Complex J { Complex(1.f, .5f * pi) };

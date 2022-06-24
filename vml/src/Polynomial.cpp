@@ -17,13 +17,22 @@ Polynomial::Polynomial(std::vector<float> _coeffs) : coeffs(_coeffs)
 
 /// degree of polynomial
 /// degree n = number of coeficient - 1
-int Polynomial::degree() const { return coeffs.size() - 1; }
+int Polynomial::degree() const
+{
+    return coeffs.size() - 1;
+}
 
 /// query coefficients
 /// indicies bigger than N return 0., no error is thrown
-float Polynomial::operator[] (int index) const
+const float& Polynomial::operator[] (int index) const
 {
-    if (index > degree()) return 0.f;
+    static Float zero{ 0.f };
+    if (index > degree()) return zero;
+    return coeffs[ index ];
+}
+float& Polynomial::operator[] (int index)
+{
+    if (index > degree()) resize(index);
     return coeffs[ index ];
 }
 
@@ -46,37 +55,115 @@ Polynomial Polynomial::derivative() const
 /// zero padding
 /// appends 0.f coefficients to match the new degree
 /// @param new_degree new value of degree
-void Polynomial::add_padding(int new_degree)
+void Polynomial::resize(int newDegree)
 {
-    if (new_degree <= degree()) return;
-    coeffs.resize(new_degree+1, 0.f);
+    coeffs.resize(newDegree+1, 0.f);
 }
 
-void Polynomial::remove_padding()
+void Polynomial::shrinkToFit()
 {
-    int i {degree()};
+    int i{ degree() };
     while (abs(coeffs[i]) < 1e-3f) i--;
     coeffs.resize(i+1);
 }
 
+// ----------------------------------------------
+// Parsing
+
 /// printing and debugging
-std::ostream& ::vml::operator << (std::ostream& os, const Polynomial& p) {
-    int i{ -1 }; // index tracker
-    int n{ p.degree() };
-    if (n==0)
+std::ostream& vml::operator << (std::ostream& os, const Polynomial& p)
+{
+    return os << parse::toString(p);
+}
+
+#include <sstream>
+std::string vml::parse::toString(const Polynomial& p)
+{
+    std::stringstream ss;
+    bool shouldSeparateNextTerm{ false };
+    
+    for
+    (
+        int i{ 0 }, n{p.degree()};
+        i <= n;
+        i++
+    )
     {
-        os << p.coeffs[0] << " (const)";
-        return os;
+        // skip terms with coefficients of value = 0
+        if (p[i] == 0.f)  continue;
+        
+        // check if terms should be separated by a '+'
+        if (shouldSeparateNextTerm) ss << " + ";
+        
+        // add terms, but conditionally omit 'x' or exponent
+        if      (i == 0) ss << p[i];
+        else if (i == 1) ss << p[i] << "x";
+        else             ss << p[i] << "x^" << i;
+        
+        // raise flag, if a term was added
+        shouldSeparateNextTerm = true;
     }
-    for (float c : p.coeffs) {
-        i++;
-//        if      (c == 0.f)  continue;
-        if      (i == 0)    os << c;
-        else if (i == 1)    os << c << "x";
-        else                os << c << "x^" << i;
-        if      (i < n)     os << " + ";
+    
+    // in case of polynomial with all zero coeffs
+    if (!shouldSeparateNextTerm) ss << "0";
+    
+    return ss.str();
+}
+
+
+bool extractTermsExponent(unsigned& e, parse::String& s)
+{
+    using namespace parse;
+    const auto pos{ s.find_first_of("^")};
+    if (pos != String::npos)
+    {
+        return stou(e, s.substr(pos+1));
     }
-    return os;
+    
+    if (s.find_first_of("x") != String::npos)
+    {
+        e = 1;
+        return true;
+    }
+    
+    e = 0;
+    Float fbuf;
+    return stof(fbuf, s);
+}
+
+bool vml::parse::stoPolynomial(Polynomial& p, const String& s)
+{
+    // delete old coeffs
+    p.resize(-1);
+    
+    String::size_type start{ 0 };
+    String::size_type stop{ s.find_first_of("+") };
+    
+    while (true)
+    {
+        String term{ s.substr(start, stop-start) };
+        
+        unsigned exponent;
+        if (!extractTermsExponent(exponent, term)) return false;
+        
+        // if exponent is not 0, find position of the 'x'
+        String::size_type xpos
+        {
+            (exponent != 0) ? term.find_first_of("x") : String::npos
+        };
+        // try to extract the coeff as a float type
+        Float coefficient;
+        if (!stof(coefficient, term.substr(0,xpos))) return false;
+        // add extracted coefficient to polynomial
+        p[exponent] += coefficient;
+        
+        // determine start and stop of next term
+        if (stop == String::npos) break;
+        start = stop + 1;
+        stop = s.find_first_of("+", start);
+    }
+    p.shrinkToFit();
+    return true;
 }
 
 /// polynomial multiplication
@@ -85,7 +172,7 @@ Polynomial vml::operator * (const Polynomial& P1, const Polynomial& P2)
 {
     // find degrees smallest degree that is power of two
     int n { (P1.degree()+1) * (P2.degree()+1) }; // who has more coeffs
-    int N { static_cast<int>(pow(2, ceil(log2(n)))) }; // ceil to power of 2
+    int N { static_cast<int>(std::pow(2, ceil(log2(n)))) }; // ceil to power of 2
     
     // initialize spectrum with 1 + j0
     std::vector<Complex> spectrum (N, Complex(1.f, 0.f));
@@ -95,7 +182,7 @@ Polynomial vml::operator * (const Polynomial& P1, const Polynomial& P2)
         // copy polynomial
         Polynomial p {P};
         // add padding to match N
-        p.add_padding( N-1 );
+        p.resize( N-1 );
         // convert coeffs into complex spectrum using fft
         std::vector<Complex> c { fft(p.coeffs) };
         // multiply to spectrums
@@ -113,7 +200,7 @@ Polynomial vml::operator * (const Polynomial& P1, const Polynomial& P2)
     // create polynomial
     Polynomial p(coeffs);
     // remove unnessecary padding
-    p.remove_padding();
+    p.shrinkToFit();
     
     return p;
 }

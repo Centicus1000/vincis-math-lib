@@ -2,7 +2,6 @@
 
 #include <iostream> // printing
 #include <cmath> // to use math every where
-#include <array> // array sytle data handling
 
 namespace vml {
 
@@ -12,7 +11,7 @@ namespace vml {
  * The Float type is set to `double` because, according to [LearnCpp](https://www.learncpp.com/cpp-tutorial/Floating-point-numbers/ ), using double instead of Float is best practice, because Float often lead to an unwanted loss in precision.
  * If you need to save space, you can change the type to float here.
  */
-using Float = /*double*/float;
+using Float = /*double*/ float;
 
 /**
  * @brief Kreiszahl.
@@ -94,6 +93,7 @@ inline int isign(int x)
 template<typename T>
 inline T lerp(T x, T imin, T imax, T omin, T omax)
 {
+    assert((imax-imin) != 0 && "Illegal input range of width 0.");
     return (omax-omin) / (imax-imin) * (x-imin) + omin;
 }
 

@@ -215,9 +215,9 @@ std::string Vec2::TikZ(const char* optionals = "") const
  * @param v2 Referenz zu einem Vec2
  * @param s Vec2 als string.
  */
-bool ::vml::parse::stoV2(Vec2& v2, const String& s)
+bool vml::parse::stoV2(Vec2& v2, const String& s)
 {
-    // find indicies of special characters
+    // find indices of special characters
     const auto bl{ s.find_first_of("(") }; // left bracket
     const auto cm{ s.find_first_of(",") }; // comma
     const auto br{ s.find_first_of(")") }; // right bracket

@@ -109,7 +109,7 @@ Float Vec4::norm() const
  *
  * Returns the a vector of length = 1, pointing in the same direction as this Vec4. This is done by dividing each attribute by the length of the vector.
  */
-Vec4 Vec4::unit() const
+Vec4 Vec4::normalized() const
 {
     Float l{ 1.f / norm() };
     return Vec4(x*l, y*l, z*l, w*l);

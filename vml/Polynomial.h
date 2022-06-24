@@ -2,17 +2,19 @@
 
 #include "Basics.h"
 #include "Complex.h"
+#include "parse.h"
 
 #include <vector>
 
-namespace vml {
+namespace vml
+{
 
 /**
  coefficient representation of a polynomial
  */
 
-class Polynomial {
-    
+class Polynomial
+{
     // attributes
     std::vector<float> coeffs;
     
@@ -21,27 +23,28 @@ public:
     Polynomial();
     Polynomial(std::vector<float> _coeffs);
     
+    // subsciption
+    const float& operator[] (int) const; // query coeffs
+    float& operator[] (int); // query coeffs
+    
     // methods
     int degree() const; // size of coeffs - 1
-    float operator[] (int) const; // query coeffs
     Polynomial derivative() const;
-    void add_padding(int);
-    void remove_padding();
+    void resize(int);
+    void shrinkToFit();
     
-    // calculate value, call operator, O(n)
-    template <typename T> // float or complex
-    T operator() (const T&) const;
+    // evaluation (call operator)
+    template <typename T> T operator() (const T&) const;
     
     // parse string
 //    static Polynomial parse(std::string&);
     
-    // polynomail multiplication via fft
+    // polynomial multiplication via FFT
     friend Polynomial operator * (const Polynomial&, const Polynomial&);
-    
-    // printing
-    friend std::ostream& operator << (std::ostream&, const Polynomial&);
 };
 
+// ----------------------------------------------
+// Evaluation
 
 /// polynom value
 /// calulates the output of the polynomial given a ceratin input
@@ -63,4 +66,17 @@ template <typename T> T Polynomial::operator() (const T& x) const
     return y;
 }
 
-} /* vml */
+
+// ----------------------------------------------
+// Parsing
+
+std::ostream& operator << (std::ostream&, const Polynomial&);
+
+namespace parse
+{
+
+bool stoPolynomial(Polynomial&, const String&);
+String toString(const Polynomial&);
+
+} /* namespace parse */
+} /* namespace vml */
