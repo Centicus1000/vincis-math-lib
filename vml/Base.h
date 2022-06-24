@@ -52,8 +52,8 @@ namespace parse {
 bool stoDigits(Digits&, const String&);
 bool stoBases(Bases&, const String&);
 
-String to_string(const Digits&);
-// no need for to_string(const Bases&) as it Bases can use the to_string(const std::vector<Base>&) template in parse.h
+String toString(const Digits&);
+// no need for toString(const Bases&) as it Bases can use the toString(const std::vector<Base>&) template in parse.h
 
 } /* namespace parse */
 

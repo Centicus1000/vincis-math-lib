@@ -7,11 +7,19 @@
 namespace vml {
 
 /**
+ * @brief The basic  floating point type for VML.
+ *
+ * The Float type is set to `double` because, according to [LearnCpp](https://www.learncpp.com/cpp-tutorial/Floating-point-numbers/ ), using double instead of Float is best practice, because Float often lead to an unwanted loss in precision.
+ * If you need to save space, you can change the type to float here.
+ */
+using Float = /*double*/float;
+
+/**
  * @brief Kreiszahl.
  *
- * Die Kreiszahl PI als ein float.
+ * Die Kreiszahl PI als ein Float.
  */
-const float pi{ 3.141592653589793238f };
+const Float pi{ 3.141592653589793238 };
 
 ///@{
 /**
@@ -19,11 +27,11 @@ const float pi{ 3.141592653589793238f };
  *
  * Diese Funktion konvertieren Winkelangaben von Grad zu Radiant und wieder zurück.
  */
-inline float radians(float degree)
+inline Float radians(Float degree)
 {
     return degree * pi / 180.f;
 }
-inline float degree(float radians)
+inline Float degree(Float radians)
 {
     return radians * 180.f / pi;
 }
@@ -37,7 +45,7 @@ inline float degree(float radians)
  * Hier wird diese Eigenschaft konpemsiert.
  * `inline` damit in .h definiert werden kann.
  */
-inline float mod(float x, float y)
+inline Float mod(Float x, Float y)
 {
     return fmod(fmod(x, y) + y, y);
 }
@@ -48,7 +56,7 @@ inline float mod(float x, float y)
  * Modulo von 2pi. Wird häufig bei Umgang mit Winkeln und Kreisbögen verwendet.
  * `inline` damit in .h definiert werden kann.
  */
-inline float mod2pi(float x)
+inline Float mod2pi(Float x)
 {
     return mod(x, 2.f * pi);
 }
@@ -60,7 +68,7 @@ inline float mod2pi(float x)
  * Bei einem Input von 0, wird 0 zurückgegeben.
  * `inline` damit in .h definiert werden kann.
  */
-inline float sign(float x)
+inline Float sign(Float x)
 {
     return (x==0.f) ? 0.f : x / abs(x);
 }
@@ -83,7 +91,8 @@ inline int isign(int x)
  * Interpolition den Eingabe wert x vom Intervall [imin, imax] aus das Interval [omin, omax]
  * Achtung imax darf nicht gleich imin sein, sonst entsteht eine Polstelle.
  */
-inline float lerp(float x, float imin, float imax, float omin, float omax)
+template<typename T>
+inline T lerp(T x, T imin, T imax, T omin, T omax)
 {
     return (omax-omin) / (imax-imin) * (x-imin) + omin;
 }

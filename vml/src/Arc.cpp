@@ -18,12 +18,18 @@ using namespace vml;
  * @param _crv Krümmung
  * @param _lng Bogenlänge
  */
-Arc::Arc(float _srx,
-         float _sry,
-         float _ang,
-         float _crv,
-         float _lng) :
-srt{ _srx, _sry }, ang{ _ang }, crv{ _crv }, lng{ _lng }
+Arc::Arc
+(
+    Float _srx,
+    Float _sry,
+    Float _ang,
+    Float _crv,
+    Float _lng
+) :
+    srt{ _srx, _sry },
+    ang{ _ang },
+    crv{ _crv },
+    lng{ _lng }
 {}
 
 /**
@@ -33,7 +39,7 @@ srt{ _srx, _sry }, ang{ _ang }, crv{ _crv }, lng{ _lng }
  *
  * @param fdata die Parameter des Kreigens, gespeichert als std::array
  */
-Arc::Arc(const std::array<float, 5>& fdata) :
+Arc::Arc(const std::array<Float, 5>& fdata) :
 Arc(fdata[0], fdata[1], fdata[2], fdata[3], fdata[4])
 {}
 
@@ -58,7 +64,7 @@ Arc{ 0.f, 0.f, 0.f, 0.f, 1.f }
  * Wenn die Krümmung gleich 0 ist, handelt es sich bei diesem Bogen eigentlich um eine gerade, ungekrümmte Strecke.
  * Start- und End- punkt sind als auf kürzestem Weg verbunden.
  */
-bool Arc::is_straight() const
+bool Arc::isStraight() const
 {
     return crv == 0.f;
 }
@@ -70,7 +76,7 @@ bool Arc::is_straight() const
  * Negative Krümmungen erzeugen dieselben Radien wie ihre positiven Partner.
  * ACHTUNG: bei geraden Bögen existiert kein Radius und hier wird durch 0 geteilt.
  */
-float Arc::radius() const
+Float Arc::radius() const
 {
     return 1.f / abs(crv);
 }
@@ -83,7 +89,7 @@ float Arc::radius() const
  * Gerade Strecke oder Bögen mit eine Länge von 0, erzeugen einen Mittelpunktswinkel von 0 rad.
  * Er berechnet sich aus dem Produkt von Kümmung und Bogenlänge.
  */
-float Arc::central_angle() const
+Float Arc::centralAngle() const
 {
     return crv * lng;
 }
@@ -108,9 +114,9 @@ Vec2 Arc::center() const
  *
  *  @param psi ein absoluter Winkel in Radiant
  */
-bool Arc::reaches(float psi) const
+bool Arc::reaches(Float psi) const
 {
-    return abs(central_angle()) >= mod2pi( sign(crv) * (psi - ang) + .5f*pi );
+    return abs(centralAngle()) >= mod2pi( sign(crv) * (psi - ang) + .5f*pi );
 }
 
 
@@ -126,10 +132,10 @@ bool Arc::reaches(float psi) const
  *
  * @param l eine (Bogen-)Länge
  */
-Vec2 Arc::at_length(float l) const
+Vec2 Arc::atLength(Float l) const
 {
     // für gerade Bögen (Strecken, crv==0)
-    if (is_straight()) return srt + l * vml::polar(ang);
+    if (isStraight()) return srt + l * vml::polar(ang);
     // für gekrümmte Bögen (crv != 0)
     return center() + vml::polar(ang - pi/2.f + l * crv)/crv;
 }
@@ -142,7 +148,7 @@ Vec2 Arc::at_length(float l) const
  */
 Vec2 Arc::end() const
 {
-    return at_length(lng);
+    return atLength(lng);
 }
 
 /**
@@ -154,7 +160,7 @@ Vec2 Arc::end() const
  *
  * @param psi absoluter Winkel in Radiant
  */
-Vec2 Arc::at_angle(float psi) const
+Vec2 Arc::atAngle(Float psi) const
 {
     return center() + vml::polar(psi) / abs(crv);
 }
@@ -173,7 +179,7 @@ Vec2 Arc::at_angle(float psi) const
  * @param rot Rotierungwinkel in Radiant
  * @param off Versatz (Offset), default = (0,0)
  */
-void Arc::transfrom(float rot, Vec2 off = Vec2(0.f))
+void Arc::transform(Float rot, Vec2 off = Vec2(0.f))
 {
     ang += rot;
     srt = srt.rotated(rot) + off;
@@ -191,23 +197,23 @@ void Arc::transfrom(float rot, Vec2 off = Vec2(0.f))
  * @param [out] output Referrenz zu einem Vec2-vector, in welchem die Abtastungen gespeichert werden sollen.
  * @param res Auflösung in Radiant, Abstand zwischen zwei diskreten Abtastungen. Default = 0.3.
  */
-void Arc::discretize(std::vector<Vec2> &output, float res) const
+void Arc::discretize(std::vector<Vec2> &output, Float res) const
 {
     // speicher die Startposition in jedem Fall
     output.push_back(srt);
 
     // für gerade Bögen wird abgebrochen
-    if (is_straight()) return;
+    if (isStraight()) return;
     
     // berechne die Anzahl der Abtastungen
-    int N { static_cast<int>(abs(central_angle())/res) };
+    int N{ static_cast<int>(abs(centralAngle())/res) };
     // berechne den Abstand zwischen zwei Abtastungen
-    float increment{ lng / N };
+    Float increment{ lng / N };
     
     // taste den Bogen mit at_length ab
     for (int i{1}; i<N; i++)
     {
-        Vec2 p{ at_length(i * increment) };
+        Vec2 p{ atLength(i * increment) };
         output.push_back(p);
     }
 }
@@ -219,18 +225,18 @@ void Arc::discretize(std::vector<Vec2> &output, float res) const
  * Für gekrümmte Bögen wird der ´arc´-Befehl verwendet, für Strecken reicht die lineare Verbindung durch ´--´.
  * ACHTUNG: Der Return-Wert dieser Funktion fukntioniert alleine nicht. Verwende lieber die [TikZ-Implementierung von ArcShape](@ref ArcShape.tikz).
  */
-std::string Arc::tikz() const
+std::string Arc::TikZ() const
 {
     std::stringstream ss;
-    if (is_straight())
+    if (isStraight())
     {
         Vec2 e{ end() };
         ss << "-- (" << e.x << "," << e.y << ") ";
     }
     else
     {
-        float sa{ degree(ang - sign(crv) * .5f*pi) };
-        float ea{ sa + degree(central_angle()) };
+        Float sa{ degree(ang - sign(crv) * .5f*pi) };
+        Float ea{ sa + degree(centralAngle()) };
         ss << "arc(" << sa << ":" << ea << ":" << radius() << ") ";
     }
     return ss.str();

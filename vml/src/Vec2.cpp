@@ -3,155 +3,174 @@
 using namespace vml;
 
 // ----------------------------------------------
-// Konstruktoren
+// Constructors
 
 /**
- * @brief Standard Konstruktor.
+ * @brief Standard Constructor.
  *
- * Initialisiert explizit die x- und y-Koordinate des Vektors.
+ * Initializes the two coordinates explicitly via parameter input. The order of the parameter corresponds to x, y.
  */
-Vec2::Vec2(float _x, float _y) : x(_x), y(_y)
+Vec2::Vec2(Float _x, Float _y) : x(_x), y(_y)
+{}
+
+
+/**
+ * @brief Single Number Constructor.
+ *
+ * Initializes both attributes to the same value which is supplied via parameter input. This calls the Standard Constructor.
+ *
+ * @param both the value that all attributes are set to
+ */
+Vec2::Vec2(Float both) : Vec2(both, both)
 {}
 
 /**
- * @brief Konstruktor mit nur einer Zahl.
+ * @brief Zero Element  (Default Constructor)
  *
- * Initialisiert beide Koordinaten mit dem selben Wert.
- *
- * @param both der Wert von der x- und y-Koordinate
- */
-Vec2::Vec2(float both) : Vec2(both, both)
-{}
-
-/**
- * @brief Nullvektor (Default Konstruktor)
- *
- * Initialisiert beide Koordinaten auf 0.
+ * Initializes both attributes to the default value of zero. This calls the Standard Constructor.
  */
 Vec2::Vec2() : Vec2(0.f, 0.f)
 {}
 
 
 // ----------------------------------------------
-// Operatoren
+// Operators
 
 /**
- * @name Mutierende Operatoren
+ * @brief Inversion.
  *
- * Diese Funktionen veränderen die Daten des Vec2.
+ * Applying the non-binary minus operator, the signs of all attributes is toggled. Positives become negative and vice versa.
  */
-///@{
-/** Invertierung */
 Vec2 Vec2::operator -() const
 {
     return Vec2(-x, -y);
 }
-/** Addition */
+
+/**
+ * @brief Add Assignment.
+ *
+ * Adds the attributes of a different Vec2 to the attributes of this Vec2.
+ * @param other a Vec2 whose values are added to this Vec2's attributes
+ */
 void Vec2::operator += (const Vec2& other)
 {
     x += other.x; y += other.y;
 }
-/** Subtraction */
+
+/**
+ * @brief Subtraction Assignment.
+ *
+ * Subtracts the attributes of a different Vec2 from the attributes of this Vec2.
+ * @param other a Vec2 whose values are subtracted from this Vec2's attributes
+ */
 void Vec2::operator -= (const Vec2& other)
 {
     x -= other.x; y -= other.y;
 }
-/** Skalierung mit einem Skalar */
-void Vec2::operator *= (float factor)
+
+/**
+ * @brief Scalar Scaling.
+ *
+ * Scales the attributes linearly by multiplying them with a scalar factor.
+ * @param factor scalar which in multiplied to all attributes
+ */
+void Vec2::operator *= (Float factor)
 {
     x *= factor; y *= factor;
 }
-/** Invertierte Skalierung durch Division mit einem Skalar */
-void Vec2::operator /= (float factor)
+
+/**
+ * @brief Scalar Divison.
+ *
+ * Scales the attributes linearly by multiplying them with a scalar factor. The factor is the inverse of the given parameter
+ * @param dividend scalar that all attributes are divided by
+ */
+void Vec2::operator /= (Float dividend)
 {
-    x /= factor; y /= factor;
+    Float factor{ 1.f / dividend};
+    x *= factor; y *= factor;
 }
 ///@}
 
+// ----------------------------------------------
+// (Other) Methods
 
 /**
- * @brief Länge des Vektors.
+ * @brief Vector Length.
  *
- * Berechnet die zweite Vektornorm (aka die Länge) des Vektors.
+ * Calculates the second vector norm, i.e., the Euclidian norm or the vector length. This is the square root all the sum of the squares of all attributes.
  */
-float Vec2::norm() const
+Float Vec2::norm() const
 {
     return sqrt(x*x + y*y);
 }
 
 /**
- * @brief Einheitsvektor.
+ * @brief Unit Vector.
  *
- * Gibt den Vektor zurück, der in die selbe Richtung zeigt, aber eine Länge von 1 hat. Das wird durch das Dividieren mit der Länge des Vektors erreicht.
+ * Returns the a vector of length = 1, pointing in the same direction as this Vec4. This is done by dividing each attribute by the length of the vector.
  */
-Vec2 Vec2::unit() const
+Vec2 Vec2::normalized() const
 {
-    float l{ norm() };
-    return Vec2(x/l, y/l);
+    Float l{ 1.f / norm() };
+    return Vec2(x*l, y*l);
 }
 
 /**
- * @brief Rotierter Vektor.
+ * @brief Rotated Vektor.
  *
- * Diese Funktioin gibt einen Vektor zurück, der zwar die selbe Länge besitzt, aber um den Winkel `angle` rotiert wurde.
- * Die Rotation erfolgt durch das Multiplizieren mit der Drehmatrix.
+ * This function returns a vector that has the same length but has been rotated by `angle`. The rotation is done by multiplying by the rotation matrix.
  *
- * @param angle Der Roationswinkel.
+ * @param angle Angle of rotation (relative to start)
  */
-Vec2 Vec2::rotated(float angle) const
+Vec2 Vec2::rotated(Float angle) const
 {
     return Vec2(x*cos(angle) - y*sin(angle),
                 x*sin(angle) + y*cos(angle));
 }
 
 // ----------------------------------------------
-// Namespace Methoden
+// Namespace Methods
 
 /**
- * @brief Vektor Addition `+`.
+ * @brief Vector Operatoren.
  *
- * Die Summe von zwei Vektoren. Wegen des Kommutativgesetzes ist die Reihenfolge von `u` und `v` egal
+ * Implementation of the binary operators (`+`,`-`,`*`,`/`)  for Vec4, which follow the standard math rules
  */
+///@{
 Vec2 vml::operator + (const Vec2& u, const Vec2& v)
 {
     return Vec2(u.x + v.x, u.y + v.y);
 }
-
-/**
- * @brief Vector Subtraktion `-`.
- *
- * Die Differenz von zwei Vektoren oder Punkten. Der resultierende Vektor entspricht dem Vektor zwischen den Punkten `u` und `v` (Spitze minus Anfang).
- */
 Vec2 vml::operator - (const Vec2& u, const Vec2& v)
 {
     return Vec2(u.x - v.x, u.y - v.y);
 }
-
-///@{
-/**
- * @brief Multiplikation mit Skalar.
- *
- * Die Skalierung eines Vektors `v` um einen `factor`. Die die Koordinaten des Vektors werden alle mit `factor` multipliziert.
- */
-Vec2 vml::operator * (float factor, const Vec2& v)
+Vec2 vml::operator * (Float factor, const Vec2& v)
 {
     return Vec2(factor * v.x, factor * v.y);
 }
-Vec2 vml::operator * (const Vec2& v, float factor)
+Vec2 vml::operator * (const Vec2& v, Float factor)
 {
+    return Vec2(factor * v.x, factor * v.y);
+}
+Vec2 vml::operator / (const Vec2& v, Float dividend)
+{
+    Float factor{ 1.f / dividend };
     return Vec2(factor * v.x, factor * v.y);
 }
 ///@}
 
 /**
- * @brief Division mit Skalar.
+ * @brief Vector Distance.
  *
- * Die Division eines Vektors `v` und eines Skalars `divident` entspricht der Multiplikation mit dem Kehrwert von `divident`. Diese Operation ist allerdings nicht kommutativ.
+ * Calculates the distance between two vectors. This is the length of the vector between u and v. The order of u and v does not matter.
  */
-Vec2 vml::operator / (const Vec2& v, float divident)
+Float vml::distance(const Vec2& u, const Vec2& v)
 {
-    return Vec2(v.x / divident, v.y / divident);
+    return (u - v).norm();
 }
+
 
 /**
  * @brief Polare Konstruktion eines Einheitsvektors
@@ -160,21 +179,9 @@ Vec2 vml::operator / (const Vec2& v, float divident)
  *
  * @param angle Winkel zwischen x-Achse und resultierendem Vektor
  */
-Vec2 vml::polar(float angle)
+Vec2 vml::polar(Float angle)
 {
     return Vec2(cos(angle), sin(angle));
-}
-
-/**
- * @brief Abstand zwischen zwei Punkten.
- *
- * Die Länge der Differenz aus zwei Vektoren.
- * Die Reihenfolgen von u und v spielt keine Rolle.
- */
-float vml::distance(const Vec2& u, const Vec2& v)
-{
-    Vec2 d{u - v};
-    return d.norm();
 }
 
 /**
@@ -182,13 +189,21 @@ float vml::distance(const Vec2& u, const Vec2& v)
  *
  * Berechnet das Skaraprodukt von zwei Vektoren `u` und `v`.
  */
-float vml::dot(const Vec2& u, const Vec2& v)
+Float vml::dot(const Vec2& u, const Vec2& v)
 {
     return u.x * v.x + u.y * v.y;
 }
 
 // ----------------------------------------------
 // String Conversion
+
+std::string Vec2::TikZ(const char* optionals = "") const
+{
+    std::stringstream ss{};
+    ss << "\\draw[" << optionals << "] ";
+    ss << (*this) << " circle(5pt) ;";
+    return ss.str();
+}
 
 
 /**
@@ -209,9 +224,10 @@ bool ::vml::parse::stoV2(Vec2& v2, const String& s)
     // return false if one of them doesn't exist
     if (bl==String::npos || cm==String::npos || br==String::npos) return false;
     // write data to Vec2 reference
-    try {
-    v2.x = std::stof(s.substr(bl + 1, cm));
-    v2.y = std::stof(s.substr(cm + 1, br));
+    try
+    {
+        v2.x = std::stof(s.substr(bl + 1, cm));
+        v2.y = std::stof(s.substr(cm + 1, br));
     } catch(...){ return false; }
     return true;
 }
@@ -266,7 +282,7 @@ bool vml::parse::stoV2vec(std::vector<Vec2>& v2v, const String& s)
  * Es wird das Klammerformat `(x,y)` verwendet, da es mit der TikZ-Syntax kombinierbar ist.
  * @param v2 Referenz zu einem Vec2
  */
-std::string vml::parse::to_string(const Vec2& v)
+std::string vml::parse::toString(const Vec2& v)
 {
     std::stringstream ss;
     ss << '(' << v.x << ',' << v.y << ')';
@@ -284,6 +300,6 @@ std::string vml::parse::to_string(const Vec2& v)
  */
 std::ostream& vml::operator<< (std::ostream& os, const Vec2& v)
 {
-    os << parse::to_string(v);
+    os << parse::toString(v);
     return os;
 }

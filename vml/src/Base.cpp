@@ -184,7 +184,7 @@ bool vml::parse::stoBases(Bases& bases, const String& s)
  *
  * Konvertiert den Digits-Vektor in einen String. Dafür werden die einzelnen Ziffern der Reihe nach in einen STring convertiert und durch eine ':' getrennt. Format: 'd1:d2:...:dn'
  */
-std::string vml::parse::to_string(const Digits& d)
+std::string vml::parse::toString(const Digits& d)
 {
     std::stringstream ss;
     for (int i{0}; i<d.size(); i++)

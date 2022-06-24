@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Basics.h"
+#include "parse.h"
 #include "Vec3.h"
 #include "Vec4.h"
 
@@ -18,39 +19,50 @@ namespace vml {
 struct Mat4
 {
     /// Anzahl der Vec4-Vektor pro Matrix, bzw. Anzahl der Reihen oder Spalten
-    static const int v_size {  4 };
-    /// Anzahl der float-Einträge in der Matrix =  4*4
-    static const int f_size { 16 };
-    
-    /// Interner Datenspeicher der Matrix: c-Style array
-    float M[f_size];
+    static const int vSize {  4 };
+    /// Anzahl der Float-Einträge in der Matrix =  4*4
+    static const int fSize { 16 };
     
     // Konstruktoren
     Mat4(const Vec4&, const Vec4&, const Vec4&, const Vec4&);
-    Mat4(float);
+    Mat4(Float);
     Mat4();
     
     // Zugang zu Einträgen
-    float* data();
-    float& operator[] (int i);
-    const float& operator[] (int i) const;
-    float& at(int, int);
-    float at(int, int) const;
+    Float* data();
+    Float& operator[] (int i);
+    const Float& operator[] (int i) const;
+    Float& at(int, int);
+    Float at(int, int) const;
     Vec4 row(int i) const;
     Vec4 col(int i) const;
     
     // Methoden
-    void transpose();
-    float det();
+//    Mat4 transposed() const;
+//    Float det() const;
     
-    // printing
-    friend std::ostream& operator << (std::ostream& os, const Mat4& m);
+private:
+    /// Interner Datenspeicher der Matrix: c-Style array
+    Float M[fSize];
 };
+
+// ----------------------------------------------
+// Operatoren
+
+std::ostream& operator << (std::ostream&, const Mat4&);
 
 // ----------------------------------------------
 // Namespace Methoden
 
-Mat4 lookat(const Vec3&, const Vec3&, const Vec3&);
-Mat4 ortho(float left, float right, float bottom, float top, float nearVal, float farVal);
+Mat4 lookAt(const Vec3&, const Vec3&, const Vec3&);
+Mat4 ortho(Float left, Float right, Float bottom, Float top, Float nearVal, Float farVal);
+
+// ----------------------------------------------
+// Parsing
+namespace parse {
+
+std::string toString(const Mat4&);
+
+} /* namespace parse */
 
 } /* vml */

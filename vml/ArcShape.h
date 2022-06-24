@@ -17,11 +17,11 @@ public:
     using std::vector<Arc>::vector;
 
     // Methoden
-    void transfrom(float, Vec2);
-    std::vector<Vec2> lowest_points() const;
-    std::vector<Vec2>* discretize(float res=.3) const;
-    std::vector<Vec2>* discretize(int requested_size) const;
-    std::string tikz(const char* optionals = "") const;
+    void transform(Float, Vec2);
+    std::vector<Vec2> lowestPoints() const;
+    void discretize(std::vector<Vec2>& points, Float res=.3) const;
+    void discretize(std::vector<Vec2>& points, int numberOfPoints) const;
+    std::string TikZ(const char* optionals = "") const;
     
     // Debugging
     friend std::ostream& operator<< (std::ostream&, const ArcShape&);

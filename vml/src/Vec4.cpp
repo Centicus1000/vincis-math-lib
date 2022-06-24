@@ -10,7 +10,7 @@ using namespace vml;
  *
  * Initializes the four coordinates explicitly via parameter input. The order of the parameter corresponds to x, y, z, w.
  */
-Vec4::Vec4(float _x, float _y, float _z, float _w) :
+Vec4::Vec4(Float _x, Float _y, Float _z, Float _w) :
 x(_x), y(_y), z(_z), w(_w)
 {}
 
@@ -21,8 +21,8 @@ x(_x), y(_y), z(_z), w(_w)
  *
  * @param all the value that all attributes are set to
  */
-Vec4::Vec4(float all) : Vec4(all, all, all, all) {}
-
+Vec4::Vec4(Float all) : Vec4(all, all, all, all)
+{}
 
 /**
  * @brief Zero Element  (Default Constructor)
@@ -74,7 +74,7 @@ void Vec4::operator -= (const Vec4& other)
  * Scales the attributes linearly by multiplying them with a scalar factor.
  * @param factor scalar which in multiplied to all attributes
  */
-void Vec4::operator *= (float factor)
+void Vec4::operator *= (Float factor)
 {
     x *= factor; y *= factor; z *= factor; w *= factor;
 }
@@ -85,9 +85,9 @@ void Vec4::operator *= (float factor)
  * Scales the attributes linearly by multiplying them with a scalar factor. The factor is the inverse of the given parameter
  * @param dividend scalar that all attributes are divided by
  */
-void Vec4::operator /= (float dividend)
+void Vec4::operator /= (Float dividend)
 {
-    float factor{ 1.f/dividend };
+    Float factor{ 1.f/dividend };
     x *= factor; y *= factor; z *= factor; w *= factor;
 }
 
@@ -99,7 +99,7 @@ void Vec4::operator /= (float dividend)
  *
  * Calculates the second vector norm, i.e., the Euclidian norm or the vector length. This is the square root all the sum of the squares of all attributes.
  */
-float Vec4::norm() const
+Float Vec4::norm() const
 {
     return sqrt(x*x + y*y + z*z + w*w);
 }
@@ -111,7 +111,7 @@ float Vec4::norm() const
  */
 Vec4 Vec4::unit() const
 {
-    float l{ 1.f / norm() };
+    Float l{ 1.f / norm() };
     return Vec4(x*l, y*l, z*l, w*l);
 }
 
@@ -121,10 +121,11 @@ Vec4 Vec4::unit() const
  *
  * Returns a four-dimensional `std::array` containing the four attributes in the order of x, y, z, w.
  */
-std::array<float, Vec4::size> Vec4::array() const
+std::array<Float, Vec4::size> Vec4::array() const
 {
     return {x, y, z, w};
 }
+
 
 // ----------------------------------------------
 // Namespace Methods
@@ -143,17 +144,17 @@ Vec4 vml::operator - (const Vec4& u, const Vec4& v)
 {
     return Vec4(u.x - v.x, u.y - v.y, u.z - v.z, u.w + v.w);
 }
-Vec4 vml::operator * (const Vec4& v, float factor)
+Vec4 vml::operator * (const Vec4& v, Float factor)
 {
     return Vec4(factor * v.x, factor * v.y, factor * v.z, factor * v.w);
 }
-Vec4 vml::operator * (float factor, const Vec4& v)
+Vec4 vml::operator * (Float factor, const Vec4& v)
 {
     return Vec4(factor * v.x, factor * v.y, factor * v.z, factor * v.w);
 }
-Vec4 vml::operator / (const Vec4& v, float dividend)
+Vec4 vml::operator / (const Vec4& v, Float dividend)
 {
-    float factor{ 1.f / dividend };
+    Float factor{ 1.f / dividend };
     return Vec4(factor * v.x, factor * v.y, factor * v.z, factor * v.w);
 }
 ///@}
@@ -163,7 +164,7 @@ Vec4 vml::operator / (const Vec4& v, float dividend)
  *
  * Calculates the distance between two vectors. This is the length of the vector between u and v. The order of u and v does not matter.
  */
-float vml::distance(const Vec4& u, const Vec4& v)
+Float vml::distance(const Vec4& u, const Vec4& v)
 {
     return (u - v).norm();
 }
@@ -173,7 +174,7 @@ float vml::distance(const Vec4& u, const Vec4& v)
  *
  * Calculates the dot product of u and v.
  */
-float vml::dot(const Vec4& u, const Vec4& v)
+Float vml::dot(const Vec4& u, const Vec4& v)
 {
     return u.x * v.x + u.y * v.y + u.z * v.z + u.w * v.w;
 }

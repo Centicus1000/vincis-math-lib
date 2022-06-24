@@ -19,7 +19,7 @@ bool ::vml::parse::contains(const String& s, const String& c)
  *
  * Wenn ein Character im String nicht Whitespace ist, wird false zurückgegeben.
  */
-bool ::vml::parse::is_whitesapce(const String& s)
+bool ::vml::parse::isWhitespace(const String& s)
 {
     return std::find_if(s.begin(), s.end(), [](unsigned char c){ return !std::isspace(c); }) == s.end();
 }
@@ -32,7 +32,7 @@ bool ::vml::parse::is_whitesapce(const String& s)
  * Vor C++20 muss die umständliche Methode mit remove_if und erase verwendet werden.
  * @param s Sting als Refernz, dessen Whitspace entfert werden soll.
  */
-void ::vml::parse::remove_whitesapce(String& s)
+void ::vml::parse::removeWhitespace(String& s)
 {
 //    s.erase_if(s.begin(), s.end(), std::isspace); <- work olny for c++20
     
@@ -64,8 +64,8 @@ bool ::vml::parse::separate(const String& line, String& left, String& right, con
     right= line.substr(i + delimiter.size(),
                        line.size());
     // remove whitespaces
-    remove_whitesapce(left);
-    remove_whitesapce(right);
+    removeWhitespace(left);
+    removeWhitespace(right);
     return true;
 }
 
@@ -83,7 +83,7 @@ bool ::vml::parse::stoi(int& i, const String& s)
     catch (...) { return false;}
     return true;
 }
-bool ::vml::parse::stof(float& f, const String& s)
+bool ::vml::parse::stof(Float& f, const String& s)
 {
     try         { f = std::stof(s);}
     catch (...) { return false;}
@@ -115,9 +115,9 @@ bool ::vml::parse::stou(unsigned& u, const String& s)
  *
  * Einige Instanzierungen der stov Funktion
  */
-bool ::vml::parse::stofv(std::vector<float>& fv, const String& s)
+bool ::vml::parse::stofv(std::vector<Float>& fv, const String& s)
 {
-    std::function< bool(float&, const String&)> convert { stof };
+    std::function< bool(Float&, const String&)> convert { stof };
     return stov(fv, s, convert);
 }
 bool ::vml::parse::stoiv(std::vector<int>& iv, const String& s)

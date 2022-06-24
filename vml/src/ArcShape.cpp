@@ -13,9 +13,9 @@ using namespace vml;
  * @param rot Rotationswinkel
  * @param off Versatz (Offset)
  */
-void ArcShape::transfrom(float rot, Vec2 off)
+void ArcShape::transform(Float rot, Vec2 off)
 {
-    for (Arc& a : (*this)) a.transfrom(rot, off);
+    for (Arc& a : (*this)) a.transform(rot, off);
 }
 
 /**
@@ -25,7 +25,7 @@ void ArcShape::transfrom(float rot, Vec2 off)
  * Es wird eine Liste möglicher Kandidaten bestimmt und zurückgegeben.
  * Jeder Bogen der List darf einen Kandidaten liefern.
  */
-std::vector<Vec2> ArcShape::lowest_points() const
+std::vector<Vec2> ArcShape::lowestPoints() const
 {
     // erstelle eine leere Punkte liste
     std::vector<Vec2> points{};
@@ -33,8 +33,8 @@ std::vector<Vec2> ArcShape::lowest_points() const
     for (const Arc& a : (*this))
     {
         // gekrümmte Bögen, die den Winkel -90° erreichen liefern einen Kandidaten.
-        if (!a.is_straight() && a.reaches(-.5f*pi))
-            points.push_back( a.at_angle(-.5f*pi) );
+        if (!a.isStraight() && a.reaches(-.5f*pi))
+            points.push_back( a.atAngle(-.5f*pi) );
     }
     
     return points;
@@ -48,42 +48,73 @@ std::vector<Vec2> ArcShape::lowest_points() const
  *
  * @param res Winkelauflüsung. Wird an [discretize](@name Arc.discretize()) weitergereicht.
  */
-std::vector<Vec2>* ArcShape::discretize(float res) const
+void ArcShape::discretize(std::vector<Vec2>& points, Float res) const
 {
-    // erstelle einen Pointer zu einer leeren Punktliste
-    std::vector<Vec2>* points{ new std::vector<Vec2>() };
     // lass jeden Bogen die List befüllen
     for (const Arc& a : (*this))
-        a.discretize(*points, res);
-    // gib pointer zurück (ohne Pointer hätte point nur local scpoe, und müsste aufwendig kopiert werden)
-    return points;
-}
-/// discretize with requested output size
-/// calls discretize() but tries to figuer out the correct angular resolution so output vector matches requested size
-/// @param requested_size size of output vector
-std::vector<Vec2>* ArcShape::discretize(int requested_size) const
-{
-    // if requested size smaller than number of arcs, retun just staring positions
-    if (requested_size < size())
-        return discretize(2*pi);
-    
-    // find sum of central angles (=0 for straigh arcs)
-    float tot_angle{0.f};
-    for (const Arc& a : (*this))
-        tot_angle += abs(a.central_angle());
-    
-    // find good resoluion
-    float res{ tot_angle / (requested_size - size())};
-    return discretize(res);
+        a.discretize(points, res);
 }
 
-/// tikz string
+/**
+ * @brief Discretization. Turns an ArcShape into a Polygon with a requested number of points
+ *
+ * The Polygon is a discrete, sampled version of the ArcShape. The higher the numberOfPoints requested in the parameter input, the more accurate the representation is going to be put the longer the sampling algorithm is going to take.
+ * The number of samples per Arc in the ArcShape is determined by its central angle. Straight Arcs with a central angle of 0, receive 0 samples, which makes sense because point along the straight line would be redundant in a polygon.
+ * Stronger curved Arcs will receive more samples per arc length because they describe more detail. But shape with strongly curved arc will seem to have a worse resolution.
+ * @param points reference to a vector of Vec2, this vector is going to receive the outline point of the polygon
+ * @param numberOfPoints the number of outline points, the polygon is supposed to have
+ */
+void ArcShape::discretize(std::vector<Vec2>& points, int numberOfPoints) const
+{
+    /// Sum up the absolute value of the central angles of the arcs in the shape
+    Float totalCentralAngle{ 0.f };
+    for (const Arc& a : (*this)) totalCentralAngle += abs(a.centralAngle());
+    /// the angularIncrement is the difference in angle between two adjacent samples
+    const Float angularIncrement{ totalCentralAngle/numberOfPoints };
+    
+    /// set up inout vector parameter for the algorithm: remove any data, reserve enough space
+    points.clear();
+    points.resize(numberOfPoints);
+    
+    /// set up algorithm variables
+    size_t arcIndex  { 0   }; ///< index of the arc that is currently sampled, counts to ArcShape.size()
+    size_t pointIndex{ 0   }; ///< index polygon point to be sampled, counts to numberOfPoints
+    Float angleOffset{ 0.f }; ///< tracks how much central angle has been used so far, is used and an offset for the next sample
+    
+    /// iterate through number of points of the polygon to ensure its size
+    for(; pointIndex < numberOfPoints; pointIndex++)
+    {
+        /// get  pointer to the (const) current arc as a short cut
+        const Arc* arc{ &at(arcIndex) };
+        
+        /// if the angleOffset exceeds the central_angle of the current Arc:
+        /// 1. reduce angleOffset by this amount, which remains for the next arc
+        /// 2. jump to the next arc by incrementing arcIndex and pointing to the new arc
+        /// Straight Arc with central_angle = 0, are automatically skip, so the curvature (crv) is never 0
+        while (abs(arc -> centralAngle()) <= angleOffset)
+        {
+            angleOffset -= abs(arc -> centralAngle());
+            arc = &at( ++arcIndex );
+        }
+        
+        /// calculate the length at which the current arc is sampled, the angleOffset is scale by the curvature to receive the arc length
+        Float sampleLength{ angleOffset / abs(arc -> crv) };
+        /// sample the arc at the determined length and save this point in the polygon
+        points[ pointIndex ] = arc -> atLength(sampleLength);
+        
+        /// after sampling increase angleOffset by the angularIncrement for the next iteration
+        angleOffset += angularIncrement;
+    }
+    /// every point in polygon is now set
+}
+
+/// TikZ string
 /// @param optionals Optionaler Tikz style, default = "" (schwarzer Strich)
-std::string ArcShape::tikz(const char* optionals) const
+std::string ArcShape::TikZ(const char* optionals) const
 {
     std::stringstream ss{};
     ss << "\\draw[" << optionals << "] " << (*this)[0].srt << " ";
-    for (const Arc& a : (*this)) ss << a.tikz();
+    for (const Arc& a : (*this)) ss << a.TikZ();
     ss << ";";
     return ss.str();
 }

@@ -13,15 +13,15 @@ namespace vml {
 struct Interval
 {
     // Attributes
-    float lo; ///< Untere Grenze des Intervalls
-    float hi; ///< Obere Grenze des Intervalls
+    Float lo; ///< Untere Grenze des Intervalls
+    Float hi; ///< Obere Grenze des Intervalls
     
     // Constructor
-    Interval(float=0.f,float=1.f);
+    Interval(Float=0.f,Float=1.f);
     
     // Methods
-    float size() const;
-    bool contains(float) const;
+    Float size() const;
+    bool contains(Float) const;
     
     friend std::ostream& operator << (std::ostream&, const Interval&);
 };
@@ -29,13 +29,13 @@ struct Interval
 // Namespace Methods
 bool operator== (const Interval&, const Interval&);
 bool operator!= (const Interval&, const Interval&);
-float lerp(float, const Interval&, const Interval&);
+Float lerp(Float, const Interval&, const Interval&);
 
 // Parsing
 namespace parse {
 
 bool stoInterval(Interval&,const String&);
-String to_string(const Interval&);
+String toString(const Interval&);
 
 } /* namespace parse */
 

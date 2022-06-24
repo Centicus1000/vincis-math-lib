@@ -20,27 +20,27 @@ struct Vec3
     static const int size{ 3 };
     
     /// Die x-Koordinate
-    float x;
+    Float x;
     /// Die y-Koordinate
-    float y;
+    Float y;
     /// Die z-Koordinate
-    float z;
+    Float z;
     
     // Konstruktoren
-    Vec3(float, float, float);
-    Vec3(float);
+    Vec3(Float, Float, Float);
+    Vec3(Float);
     Vec3();
     
     // Methoden
-    float norm() const;
+    Float norm() const;
     Vec3 normalized() const;
     
     // Operatoren
     Vec3 operator -() const;
     void operator += (const Vec3& other);
     void operator -= (const Vec3& other);
-    void operator *= (float factor);
-    void operator /= (float factor);
+    void operator *= (Float factor);
+    void operator /= (Float factor);
     
     // Debugging
     friend std::ostream& operator << (std::ostream& os, const Vec3& v);
@@ -52,13 +52,25 @@ struct Vec3
 
 Vec3 operator + (const Vec3& u, const Vec3& v);
 Vec3 operator - (const Vec3& u, const Vec3& v);
-Vec3 operator * (float factor, const Vec3& v);
-Vec3 operator * (const Vec3& v, float factor);
-Vec3 operator / (const Vec3& v, float divident);
+Vec3 operator * (Float factor, const Vec3& v);
+Vec3 operator * (const Vec3& v, Float factor);
+Vec3 operator / (const Vec3& v, Float divident);
 
-float distance(const Vec3& u, const Vec3& v);
-float dot(const Vec3& u, const Vec3& v);
-Vec3 orbit(float yaw, float pitch);
+Float distance(const Vec3& u, const Vec3& v);
+Float dot(const Vec3& u, const Vec3& v);
+Vec3 orbit(Float yaw, Float pitch);
 Vec3 cross(const Vec3& a, const Vec3& b);
 
-} /* vml */
+
+// ----------------------------------------------
+// Parsing
+namespace parse
+{
+
+bool stoV3(Vec3&, const String&);
+bool stoV3vec(std::vector<Vec3>&, const String&);
+String toString(const Vec3&);
+
+} /* namespace parse */
+
+} /* namespace vml */

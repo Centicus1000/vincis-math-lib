@@ -1,6 +1,6 @@
 #pragma once
 
-#include "basics.h"
+#include "Basics.h"
 
 #include <vector>
 #include <functional>
@@ -16,7 +16,7 @@ namespace vml {
  * Dabei ist `N` die Knotenclasse und `E` ein Datentyp, der an einer Kante gespeichert wird.
  * Die Knoten werden in einem `std::vector` namens `nodes` gespeichert.
  * Um neue Knoten zuspeichern oder die vorhandenen Knoten zu manipulieren, kann ganz normal die API von [`std::vector`](https://en.cppreference.com/w/cpp/container/vector) verwendet werden.
- * Die Indezes (`Key`) zwei verbundener Knoten werden in einer Kantenstruktur namens `Edge` gespeichert.
+ * Die Indezes (`Index`) zwei verbundener Knoten werden in einer Kantenstruktur namens `Edge` gespeichert.
  * Dabei können optional mit `E` Daten wie eine Gewichtung an die Kante angehängt werden.
  * Diese Kanten werden in einer privaten Adjazenzliste `adjacencies` gespeichert.
  * `adjacencies` genauso viele Einträge wie `nodes`.
@@ -36,21 +36,21 @@ public:
      * Den Index eines Knotens verwendets die `Graph`-Klasse, um die Referenzen zwischen Kanten und Knoten zu organisieren.
      * Sie entspricht dem [`std::size_t`-Typen](https://en.cppreference.com/w/cpp/types/size_t), welcher einem Integraltypen ohne Vorzeichen entspricht.
      */
-    typedef std::size_t Key;
+    typedef std::size_t Index;
 
     /**
      * @brief Nonode (Kein Knoten).
      *
      * Der maximalste Index wird verwendet um keinen Knoten auszudrücken. Immer wenn ein Index zu einem nicht vorhandenen Element abgefragt wird, wird er nonode index zurückgeben, um so Fehler meldungen zu umgehen.
-     * durch den static_cast von -1 auf den Key typen, welcher intern ein unsigned long ist wird automatisch die höchstmögliche Zahl genommen.
+     * durch den static_cast von -1 auf den Index typen, welcher intern ein unsigned long ist wird automatisch die höchstmögliche Zahl genommen.
      */
-    static constexpr Key nonode{ static_cast<Key>(-1) };
+    static constexpr Index NoN{ static_cast<Index>(-1) };
 
 
     /**
      * @brief Kantentyp.
      *
-     * `Edge` repräsentiert eine Kante zwischen zwei Knoten. Die Knoten werden mit ihrem Index `Key` referrenziert.
+     * `Edge` repräsentiert eine Kante zwischen zwei Knoten. Die Knoten werden mit ihrem Index `Index` referrenziert.
      * Optional kann eine zusätzliche Information wie eine Gewichtung der Kante angehängt werden.
      * Diese wird dann durch `E` repräsentiert.
      */
@@ -61,14 +61,14 @@ public:
          *
          * Index des Ausgangsknotens einer gerichtetenen Kante. Zur Veranschaulichung wird die Stammbaumanalogie angewendet, wodurch dieser Knoten als "Elter" bezeichnet wird.
          */
-        Key parent;
+        Index parent;
 
         /**
          * @brief Kindknoten bzw. Zielknoten.
          *
          * Index des Zielknotens einer gerichtetenen Kante. Zur Veranschaulichung wird die Stammbaumanalogie angewendet, wodurch dieser Knoten als "Kind" bezeichnet wird.
          */
-        Key child;
+        Index child;
 
         /**
          * @brief Optionale Kanteninformation
@@ -121,7 +121,7 @@ public:
      * @param child Index des Kindknotens
      * @param data Optionale Referenz zu einer Kanteninformation, bei keiner Angaben wir der default Konstruktor aufgerufen.
      */
-    void link(Key parent, Key child, const E& data = E())
+    void link(Index parent, Index child, const E& data = E())
     {
         edges(parent).emplace_back(parent, child, data);
     }
@@ -136,7 +136,7 @@ public:
      * @param child Index des Kindknotens
      * @param data Optionale Referenz zu einer Kanteninformation, bei keiner Angaben wir der default Konstruktor aufgerufen.
      */
-    void bilink(Key parent, Key child, const E& data = E())
+    void bilink(Index parent, Index child, const E& data = E())
     {
         link(parent, child, data);
         link(child, parent, data);
@@ -158,7 +158,7 @@ public:
      * die Adjazenzliste und Knotenlisten können syncronisiert werden.
      * Befindet sich an der gesuchten Stelle ein `nullptr` wird ein Pointer zu einer neuen Kantenliste dort gespeichert und die Refernz dazu zurückgegeben.
      */
-    std::vector<Edge>& edges(Key node)
+    std::vector<Edge>& edges(Index node)
     {
         // syncronisiere die Anzahl der Einträge von adjacencies und nodes
         sync();
@@ -176,12 +176,12 @@ public:
      * Alle Knoten neuen Knoten werden, wie nullptr-Einträge behandelt, und es wird eine leere Liste zurück gegeben.
      * Da die leere Liste nicht in `adjacencies` gespeichert werden kann, wird eine statische Instanz einer leeren liste `empty` erstellt, welche als Refernze zurückgegeben werden kann.
      */
-    const std::vector<Edge>& edges(Key node) const
+    const std::vector<Edge>& edges(Index node) const
     {
         // kreiere eine statische Instanz einer leeren Kantenliste
         static const std::vector<Edge> empty{};
 
-        // prüfe ob der Key zu groß für adjacencies ist, trifft auch für nonode zu
+        // prüfe ob der Index zu groß für adjacencies ist, trifft auch für nonode zu
         if (node >= adjacencies.size()) return empty;
         // prüfe ob der Knoten noch keine auswärtigen Kanten besitzt
         if (!adjacencies[node]) return empty;
@@ -193,7 +193,7 @@ public:
 
 
 	//@Todo: Docu
-    bool is_edge(Key parent, Key child) const
+    bool isEdge(Index parent, Index child) const
     {
         // get reference to adjacencies of parent
         const std::vector<Edge>& elist{ edges(parent) };
@@ -212,7 +212,7 @@ public:
      *
      * Löschen die Pointer zu den Kanten listen die in der privaten Adjazenz liste gespeichert sind
      */
-    void delet_all_edges()
+    void deletAllEdges()
     {
         // delete all Edge vector in adjacency list
         for(auto evec : adjacencies) delete evec;
@@ -226,9 +226,9 @@ public:
      *
      * @param parent Index des Elternknotens
      */
-    std::vector<Key> children(Key parent) const
+    std::vector<Index> children(Index parent) const
     {
-        std::vector<Key> keys{};
+        std::vector<Index> keys{};
         for(const Edge& e : edges(parent))
             keys.push_back(e.child);
         return keys;
@@ -246,14 +246,14 @@ public:
      * @param predicate Eine Lambda-Funktion, die eine Kanten Referenz als Eingang nimmt.
      */
     ///@{
-    void for_edges(const std::function<void(Edge&)>& predicate)
+    void forEachEdge(const std::function<void(Edge&)>& predicate)
     {
         for (std::vector<Edge>* evec : adjacencies)
             if (evec)
                 for (Edge& e : *evec)
                     predicate( e );
     }
-    void for_edges(const std::function<void(const Edge&)>& predicate) const
+    void forEachEdge(const std::function<void(const Edge&)>& predicate) const
     {
         for (std::vector<Edge>* evec : adjacencies)
             if (evec)
@@ -270,11 +270,11 @@ public:
      * @param predicate Eine Lambda-Funktion, die eine Kanten Referenz als Eingang nimmt.
      */
     ///@{
-    void for_nodes(const std::function<void(N&)>& predicate)
+    void forEachNode(const std::function<void(N&)>& predicate)
     {
         for (N& nref : nodes) predicate( nref );
     }
-    void for_nodes(const std::function<void(const N&)>& predicate) const
+    void forEachNode(const std::function<void(const N&)>& predicate) const
     {
         for (const N& nref : nodes) predicate( nref );
     }

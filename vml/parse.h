@@ -1,39 +1,42 @@
 #pragma once
 
+#include "Basics.h"
+
 #include <string>
 #include <sstream>
 #include <vector>
 #include <functional>
 
-
-namespace vml {
-namespace parse {
+namespace vml
+{
+namespace parse
+{
 
 typedef std::string String;
 
 bool contains(const String&, const String&);
-bool is_whitesapce(const String&);
-void remove_whitesapce(String&);
+bool isWhitespace(const String&);
+void removeWhitespace(String&);
 bool separate(const String&, String&, String&, const String&);
 
 bool stoi(int&, const String&);
-bool stof(float&, const String&);
+bool stof(Float&, const String&);
 bool stoul(unsigned long&, const String&);
 bool stou(unsigned&, const String&);
 
-bool stofv(std::vector<float>&, const String&);
+bool stofv(std::vector<Float>&, const String&);
 bool stoiv(std::vector<int>&, const String&);
 
 /**
  * @brief Vector to String.
  *
  * Eine Template-Funktion, die Vector von beliebigem Type zu einem String convertiert. Dafür muss der Type über einen validen string_stream operator<< overload verfügen.
- * Funktioniert für int, float und Vec2.
+ * Funktioniert für int, Float und Vec2.
  * @param v std::vector dessen einträge von template-Typen sind
  * @param convect eine std::function die einen template-Typen/einen Eintrag im Vector zu einem String konvertiert.
  */
 template<typename T>
-String to_string(const std::vector<T>& v)
+String toString(const std::vector<T>& v)
 {
     std::stringstream ss;
     ss << "[";
@@ -46,7 +49,7 @@ String to_string(const std::vector<T>& v)
 /**
  * @brief String zu Vektor Konvertieren.
  *
- * Mit dieser Funktion wird ein float Vector gelesen. Dieser sollte die form "[a, b, c,..., n]" verwenden.
+ * Mit dieser Funktion wird ein Float Vector gelesen. Dieser sollte die form "[a, b, c,..., n]" verwenden.
  * Die Funktion gibt true oder false zurück, je nachdem ob der Vector erfolgreich erstellt wurde.
  * Über Convert kann die String-Konvertierung der einzelen Elemente Eingestellt werden.
  */
@@ -61,10 +64,10 @@ bool stov(std::vector<T>& v,
     if (start==String::npos) return false;
     
     // repeadetly find commas and parse string inbetween
-    auto stop { s.find_first_of(",") };
+    auto stop{ s.find_first_of(",") };
     while (stop!=String::npos)
     {
-        // pushback float value
+        // pushback Float value
         T temp;
         if (!convert(temp, s.substr(start+1, stop))) return false;
         v.push_back(temp);

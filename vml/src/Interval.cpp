@@ -12,7 +12,7 @@ using namespace vml;
  * @param _lo Wert der Unteren Grenze (erster Parameter)
  * @param _hi Wert der Oberen Granze (zweiter Parameter)
  */
-Interval::Interval(float _lo, float _hi) : lo(_lo), hi(_hi)
+Interval::Interval(Float _lo, Float _hi) : lo(_lo), hi(_hi)
 {}
 
 // ----------------------------------------------
@@ -24,7 +24,7 @@ Interval::Interval(float _lo, float _hi) : lo(_lo), hi(_hi)
  * Berechnet die Länge des Intervall.
  * Achtung wenn hi kleiner als lo, dann ist die Länge negativ.
  */
-float Interval::size() const
+Float Interval::size() const
 {
     return hi - lo;
 }
@@ -34,9 +34,9 @@ float Interval::size() const
  *
  * Überprüft ob ein Eingangswert auf dem gegebenen Intervall liegt.
  * Hier wird die Halboffenheit Implementiert.
- * Bei float-Wert macht das allerdings nur wenig aus.
+ * Bei Float-Wert macht das allerdings nur wenig aus.
  */
-bool Interval::contains(float x) const
+bool Interval::contains(Float x) const
 {
     return (lo <= x) && (x < hi);
 }
@@ -52,12 +52,12 @@ bool Interval::contains(float x) const
  */
 bool ::vml::operator == (const Interval& a, const Interval& b)
 {
-    float d{ ((a.lo - b.lo)*(a.lo - b.lo) + (a.hi - b.hi)*(a.hi - b.hi)) };
+    Float d{ ((a.lo - b.lo)*(a.lo - b.lo) + (a.hi - b.hi)*(a.hi - b.hi)) };
     return d < 1e-5f;
 }
 bool ::vml::operator != (const Interval& a, const Interval& b)
 {
-    float d{ ((a.lo - b.lo)*(a.lo - b.lo) + (a.hi - b.hi)*(a.hi - b.hi)) };
+    Float d{ ((a.lo - b.lo)*(a.lo - b.lo) + (a.hi - b.hi)*(a.hi - b.hi)) };
     return d > 1e-5f;
 }
 ///@}
@@ -70,7 +70,7 @@ bool ::vml::operator != (const Interval& a, const Interval& b)
  * @param inval Eingangsintervall
  * @param outval Ausgangsintervall
  */
-float ::vml::lerp(float x, const Interval& inval, const Interval& outval)
+Float vml::lerp(Float x, const Interval& inval, const Interval& outval)
 {
     return lerp(x, inval.lo, inval.hi, outval.lo, outval.hi);
 }
@@ -101,7 +101,7 @@ bool vml::parse::stoInterval(Interval& I, const String& s)
  *
  * Konvertiert die Intervall-Struktur zu einem String. Dabei wird die Notation "lo...hi" verwendet
  */
-std::string vml::parse::to_string(const Interval& I)
+std::string vml::parse::toString(const Interval& I)
 {
     std::stringstream ss;
     ss << std::to_string(I.lo) << "..." << std::to_string(I.hi);
@@ -111,6 +111,6 @@ std::string vml::parse::to_string(const Interval& I)
 
 std::ostream& ::vml::operator << (std::ostream& os, const Interval& I)
 {
-    os << parse::to_string(I);
+    os << parse::toString(I);
     return os;
 }

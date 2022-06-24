@@ -15,27 +15,29 @@ namespace vml {
 struct Cashew
 {
     // Attribute
-    float d;
-    float r1;
-    float r2;
-    float g;
+    Float d;
+    Float r1;
+    Float r2;
+    Float g;
     
     // Konstruktoren
     Cashew();
-    Cashew(float,float,float,float);
+    Cashew(Float,Float,Float,Float);
     
     // Methoden
-    ArcShape* construct() const;
+    void construct(ArcShape&) const;
     
     // Debugging
     friend std::ostream& operator<< (std::ostream&, const Cashew&);
 };
 
+// ----------------------------------------------
 // Parsing
-namespace parse {
+namespace parse
+{
 
 bool stoCashew(Cashew&, const String&);
-String to_string(const Cashew&);
+String toString(const Cashew&);
 
 } /* namespace parse */
 
